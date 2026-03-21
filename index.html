@@ -18,13 +18,13 @@
 
     :root{
       --bg:#0b0d12;
-      --card:rgba(20,24,32,0.78);
+      --card:rgba(17,21,29,0.78);
       --line:rgba(255,255,255,0.10);
       --text:#f5f7fb;
       --muted:#c8cfda;
       --accent:#ff8a00;
       --accent2:#ffb347;
-      --shadow:0 18px 44px rgba(0,0,0,0.30);
+      --shadow:0 18px 44px rgba(0,0,0,0.34);
     }
 
     body{
@@ -42,6 +42,10 @@
       color:inherit;
     }
 
+    button{
+      font-family:inherit;
+    }
+
     .page{
       position:relative;
       min-height:100vh;
@@ -55,18 +59,54 @@
       position:absolute;
       inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.60) 58%, rgba(0,0,0,0.82) 100%),
+        linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.62) 55%, rgba(0,0,0,0.84) 100%),
         radial-gradient(circle at top right, rgba(255,138,0,0.18), transparent 28%),
-        url('partner-bg.jpg') center/cover no-repeat;
+        url('Mealbuzz partner.jpg') center/cover no-repeat;
       z-index:0;
     }
 
     .shell{
       position:relative;
       z-index:1;
-      width:min(1100px, 100%);
+      width:min(1120px, 100%);
       display:grid;
       gap:20px;
+    }
+
+    .top-actions{
+      position:relative;
+      z-index:2;
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:-6px;
+    }
+
+    .lang-switch{
+      display:inline-flex;
+      gap:6px;
+      padding:6px;
+      border-radius:16px;
+      background:rgba(17,21,29,0.70);
+      border:1px solid rgba(255,255,255,0.10);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+    }
+
+    .lang-btn{
+      border:none;
+      background:transparent;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .lang-btn.active{
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      color:#fff;
     }
 
     .hero-card,
@@ -263,11 +303,6 @@
       text-align:center;
     }
 
-    .bottom-note a{
-      color:#ffbe63;
-      font-weight:700;
-    }
-
     .footer{
       margin-top:8px;
       text-align:center;
@@ -280,6 +315,10 @@
       .shell{
         grid-template-columns:1.15fr 0.85fr;
         align-items:center;
+      }
+
+      .top-actions{
+        grid-column:1 / -1;
       }
 
       .hero-card{
@@ -310,42 +349,49 @@
     <div class="bg"></div>
 
     <div class="shell">
+      <div class="top-actions">
+        <div class="lang-switch">
+          <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
+          <button class="lang-btn" id="enBtn" onclick="setLanguage('en')">English</button>
+        </div>
+      </div>
+
       <section class="hero-card">
         <div class="hero-inner">
           <div class="brand">
             <h1>Meal Buzz Partner</h1>
-            <p>Owner Portal</p>
+            <p id="brandSub">Owner Portal</p>
           </div>
 
-          <div class="eyebrow">Partner growth platform</div>
+          <div class="eyebrow" id="eyebrow">Partner growth platform</div>
 
-          <h2 class="hero-title">
+          <h2 class="hero-title" id="heroTitle">
             <span class="accent">चव तुमची,</span><br>
             पोहोच आमची
           </h2>
 
-          <p class="hero-subtitle">
+          <p class="hero-subtitle" id="heroSubtitle">
             तुमच्या मेसला द्या नव्या ग्राहकांची वाट
           </p>
 
-          <p class="hero-english">
+          <p class="hero-english" id="heroEnglish">
             Your Taste, Our Reach — Open new paths for your mess to reach customers.
           </p>
 
           <div class="mini-points">
             <div class="mini-point">
               <span></span>
-              <div>रोजचा मेन्यू अपडेट करा आणि जवळच्या लोकांपर्यंत पोहोचा</div>
+              <div id="point1">रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा</div>
             </div>
 
             <div class="mini-point">
               <span></span>
-              <div>तुमच्या मेसची माहिती, मेन्यू आणि प्रतिमा एका ठिकाणी सांभाळा</div>
+              <div id="point2">तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा</div>
             </div>
 
             <div class="mini-point">
               <span></span>
-              <div>तुमच्या मेसला अधिक लोकांच्या नजरेत आणण्यासाठी सोपा पार्टनर पोर्टल</div>
+              <div id="point3">तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल</div>
             </div>
           </div>
         </div>
@@ -353,8 +399,8 @@
 
       <section class="login-card">
         <div class="login-inner">
-          <h3 class="login-title">Owner Login</h3>
-          <p class="login-subtitle">
+          <h3 class="login-title" id="loginTitle">Owner Login</h3>
+          <p class="login-subtitle" id="loginSubtitle">
             तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.
           </p>
 
@@ -373,20 +419,20 @@
               placeholder="पासवर्ड"
             />
 
-            <button class="login-btn" onclick="ownerLogin()">Login</button>
+            <button class="login-btn" id="loginBtn" onclick="ownerLogin()">Login</button>
 
             <a href="register.html">
-              <button class="register-btn" type="button">New Partner? Register Your Mess</button>
+              <button class="register-btn" id="registerBtn" type="button">New Partner? Register Your Mess</button>
             </a>
 
             <div class="status" id="loginStatus"></div>
           </div>
 
-          <div class="bottom-note">
+          <div class="bottom-note" id="bottomNote">
             एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.
           </div>
 
-          <div class="footer">
+          <div class="footer" id="footerText">
             © 2026 Meal Buzz Partner
           </div>
         </div>
@@ -400,10 +446,88 @@
     const SUPABASE_KEY = "sb_publishable_fwhxfVqWpDrro8hkQbQQRA_1crMexZv";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    const translations = {
+      mr: {
+        htmlLang: "mr",
+        brandSub: "Owner Portal",
+        eyebrow: "Partner growth platform",
+        heroTitle: `<span class="accent">चव तुमची,</span><br>पोहोच आमची`,
+        heroSubtitle: "तुमच्या मेसला द्या नव्या ग्राहकांची वाट",
+        heroEnglish: "Your Taste, Our Reach — Open new paths for your mess to reach customers.",
+        point1: "रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा",
+        point2: "तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा",
+        point3: "तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल",
+        loginTitle: "Owner Login",
+        loginSubtitle: "तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.",
+        phonePlaceholder: "नोंदणीकृत मोबाइल नंबर",
+        passwordPlaceholder: "पासवर्ड",
+        loginBtn: "Login",
+        registerBtn: "New Partner? Register Your Mess",
+        bottomNote: "एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.",
+        fillFields: "कृपया मोबाइल नंबर आणि पासवर्ड भरा.",
+        loggingIn: "Logging in...",
+        loginError: "लॉगिन करताना अडचण आली.",
+        wrongCreds: "मोबाइल नंबर किंवा पासवर्ड चुकीचा आहे.",
+        success: "लॉगिन यशस्वी 🎉"
+      },
+      en: {
+        htmlLang: "en",
+        brandSub: "Owner Portal",
+        eyebrow: "Partner growth platform",
+        heroTitle: `Your <span class="accent">Taste,</span><br>Our Reach`,
+        heroSubtitle: "Open new paths for your mess to reach customers",
+        heroEnglish: "Helping your mess reach more nearby customers with simple daily updates.",
+        point1: "Update your daily menu and reach more nearby customers",
+        point2: "Manage your mess details, menus and images in one place",
+        point3: "A simple partner portal to improve your local visibility",
+        loginTitle: "Owner Login",
+        loginSubtitle: "Login with your registered mobile number and password.",
+        phonePlaceholder: "Registered mobile number",
+        passwordPlaceholder: "Password",
+        loginBtn: "Login",
+        registerBtn: "New Partner? Register Your Mess",
+        bottomNote: "Once registered, use the same number to login.",
+        fillFields: "Please enter mobile number and password.",
+        loggingIn: "Logging in...",
+        loginError: "There was a problem while logging in.",
+        wrongCreds: "Wrong mobile number or password.",
+        success: "Login successful 🎉"
+      }
+    };
+
+    let currentLang = localStorage.getItem("partnerLang") || "mr";
+
     function setLoginStatus(message, isError = false) {
       const box = document.getElementById("loginStatus");
       box.innerText = message;
       box.className = isError ? "status error" : "status";
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("partnerLang", lang);
+
+      const t = translations[lang];
+
+      document.documentElement.lang = t.htmlLang;
+      document.getElementById("brandSub").innerText = t.brandSub;
+      document.getElementById("eyebrow").innerText = t.eyebrow;
+      document.getElementById("heroTitle").innerHTML = t.heroTitle;
+      document.getElementById("heroSubtitle").innerText = t.heroSubtitle;
+      document.getElementById("heroEnglish").innerText = t.heroEnglish;
+      document.getElementById("point1").innerText = t.point1;
+      document.getElementById("point2").innerText = t.point2;
+      document.getElementById("point3").innerText = t.point3;
+      document.getElementById("loginTitle").innerText = t.loginTitle;
+      document.getElementById("loginSubtitle").innerText = t.loginSubtitle;
+      document.getElementById("ownerPhone").placeholder = t.phonePlaceholder;
+      document.getElementById("ownerPassword").placeholder = t.passwordPlaceholder;
+      document.getElementById("loginBtn").innerText = t.loginBtn;
+      document.getElementById("registerBtn").innerText = t.registerBtn;
+      document.getElementById("bottomNote").innerText = t.bottomNote;
+
+      document.getElementById("mrBtn").classList.toggle("active", lang === "mr");
+      document.getElementById("enBtn").classList.toggle("active", lang === "en");
     }
 
     const savedOwnerPhone = localStorage.getItem("ownerPhone");
@@ -412,15 +536,16 @@
     }
 
     async function ownerLogin() {
+      const t = translations[currentLang];
       const phone = document.getElementById("ownerPhone").value.trim();
       const password = document.getElementById("ownerPassword").value.trim();
 
       if (!phone || !password) {
-        setLoginStatus("कृपया मोबाइल नंबर आणि पासवर्ड भरा.", true);
+        setLoginStatus(t.fillFields, true);
         return;
       }
 
-      setLoginStatus("Logging in...");
+      setLoginStatus(t.loggingIn);
 
       const { data, error } = await sb
         .from("mess")
@@ -431,12 +556,12 @@
 
       if (error) {
         console.log(error);
-        setLoginStatus("लॉगिन करताना अडचण आली.", true);
+        setLoginStatus(t.loginError, true);
         return;
       }
 
       if (!data || data.length === 0) {
-        setLoginStatus("मोबाइल नंबर किंवा पासवर्ड चुकीचा आहे.", true);
+        setLoginStatus(t.wrongCreds, true);
         return;
       }
 
@@ -446,12 +571,14 @@
       localStorage.setItem("ownerMessId", owner.id);
       localStorage.setItem("ownerMessName", owner.name || "");
 
-      setLoginStatus("लॉगिन यशस्वी 🎉");
+      setLoginStatus(t.success);
 
       setTimeout(() => {
         window.location.href = "dashboard.html";
       }, 500);
     }
+
+    setLanguage(currentLang);
   </script>
 
 </body>
