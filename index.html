@@ -20,14 +20,15 @@
       --muted:#d6dde8;
       --accent:#ff9800;
       --accent2:#ffbf66;
-      --card:rgba(10,12,18,0.80);
+      --card:rgba(10,12,18,0.78);
       --border:rgba(255,255,255,0.12);
     }
 
     body{
       font-family:'Inter',sans-serif;
-      background:#0b0d12;
+      background:#080b12;
       color:var(--text);
+      overflow-x:hidden;
     }
 
     button,input{
@@ -42,16 +43,38 @@
     .page{
       min-height:100vh;
       position:relative;
+      background:#080b12;
+      overflow:hidden;
+    }
+
+    .hero-bg{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center top;
+      z-index:0;
+      filter:brightness(0.78);
+    }
+
+    .overlay{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      background:
+        linear-gradient(180deg, rgba(4,7,12,0.08) 0%, rgba(4,7,12,0.10) 20%, rgba(4,7,12,0.24) 48%, rgba(4,7,12,0.56) 74%, rgba(4,7,12,0.88) 100%);
+    }
+
+    .content{
+      position:relative;
+      z-index:2;
+      min-height:100vh;
       display:flex;
       flex-direction:column;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.08) 34%, rgba(0,0,0,0.30) 68%, rgba(0,0,0,0.72) 100%),
-        url("Mealbuzzpartner.jpg") center top / cover no-repeat;
     }
 
     .topbar{
-      position:relative;
-      z-index:2;
       width:min(1180px,100%);
       margin:0 auto;
       padding:20px 16px 0;
@@ -66,8 +89,8 @@
       border-radius:18px;
       background:rgba(10,12,18,0.34);
       border:1px solid rgba(255,255,255,0.14);
-      backdrop-filter:blur(6px);
-      -webkit-backdrop-filter:blur(6px);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
       box-shadow:0 10px 26px rgba(0,0,0,0.18);
     }
 
@@ -88,11 +111,9 @@
     }
 
     .hero{
-      position:relative;
-      z-index:2;
       width:min(1180px,100%);
       margin:0 auto;
-      padding:56px 16px 22px;
+      padding:58px 16px 18px;
       flex:1;
       display:flex;
       align-items:flex-end;
@@ -104,12 +125,12 @@
 
     .main-title{
       font-family:'Poppins',sans-serif;
-      font-size:clamp(40px,9vw,78px);
-      line-height:0.98;
+      font-size:clamp(42px,9vw,82px);
+      line-height:0.95;
       margin-bottom:12px;
       font-weight:800;
       letter-spacing:-1.4px;
-      background:linear-gradient(90deg,#ffffff 0%, #fff4e8 30%, #ffd699 58%, #ffb347 76%, #ff9800 100%);
+      background:linear-gradient(90deg,#ffffff 0%, #fff4e8 28%, #ffd699 58%, #ffb347 76%, #ff9800 100%);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
@@ -126,8 +147,6 @@
     }
 
     .login-wrap{
-      position:relative;
-      z-index:3;
       width:min(1180px,100%);
       margin:0 auto;
       padding:0 16px 28px;
@@ -232,10 +251,8 @@
     }
 
     @media (max-width:900px){
-      .page{
-        background:
-          linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.06) 26%, rgba(0,0,0,0.22) 56%, rgba(0,0,0,0.68) 100%),
-          url("Mealbuzzpartner.jpg") 58% top / cover no-repeat;
+      .hero-bg{
+        object-position:58% top;
       }
 
       .topbar{
@@ -244,8 +261,7 @@
 
       .hero{
         padding:34px 14px 14px;
-        min-height:48vh;
-        align-items:flex-end;
+        min-height:42vh;
       }
 
       .main-title{
@@ -275,15 +291,18 @@
     }
 
     @media (max-width:600px){
-      .page{
+      .hero-bg{
+        object-position:60% top;
+      }
+
+      .overlay{
         background:
-          linear-gradient(180deg, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.05) 22%, rgba(0,0,0,0.20) 54%, rgba(0,0,0,0.70) 100%),
-          url("Mealbuzzpartner.jpg") 60% top / cover no-repeat;
+          linear-gradient(180deg, rgba(4,7,12,0.02) 0%, rgba(4,7,12,0.04) 18%, rgba(4,7,12,0.16) 40%, rgba(4,7,12,0.52) 68%, rgba(4,7,12,0.88) 100%);
       }
 
       .hero{
-        min-height:44vh;
-        padding:28px 14px 10px;
+        min-height:38vh;
+        padding:26px 14px 10px;
       }
 
       .main-title{
@@ -315,44 +334,48 @@
   </style>
 </head>
 <body>
-
   <div class="page">
-    <div class="topbar">
-      <div class="lang-switch">
-        <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
-        <button class="lang-btn" id="enBtn" onclick="setLanguage('en')">English</button>
-      </div>
-    </div>
+    <img src="partner.jpg" alt="Meal Buzz Partner Background" class="hero-bg">
+    <div class="overlay"></div>
 
-    <section class="hero">
-      <div class="hero-box">
-        <div class="main-title">Meal Buzz Partner</div>
-        <div class="portal" id="portalText">OWNER PORTAL</div>
-      </div>
-    </section>
-
-    <section class="login-wrap">
-      <div class="login-card">
-        <div class="login-title" id="loginTitle">Owner Login</div>
-        <div class="login-subtitle" id="loginSubtitle">तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.</div>
-
-        <div class="form">
-          <input type="text" id="ownerPhone" class="input" placeholder="नोंदणीकृत मोबाइल नंबर">
-          <input type="password" id="ownerPassword" class="input" placeholder="पासवर्ड">
-
-          <button class="login-btn" id="loginBtn" onclick="ownerLogin()">Login</button>
-
-          <a href="register.html">
-            <button class="register-btn" type="button" id="registerBtn">New Partner? Register Your Mess</button>
-          </a>
-
-          <div class="status" id="loginStatus"></div>
+    <div class="content">
+      <div class="topbar">
+        <div class="lang-switch">
+          <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
+          <button class="lang-btn" id="enBtn" onclick="setLanguage('en')">English</button>
         </div>
-
-        <div class="bottom-note" id="bottomNote">एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.</div>
-        <div class="footer">© 2026 Meal Buzz Partner</div>
       </div>
-    </section>
+
+      <section class="hero">
+        <div class="hero-box">
+          <div class="main-title">Meal Buzz Partner</div>
+          <div class="portal" id="portalText">OWNER PORTAL</div>
+        </div>
+      </section>
+
+      <section class="login-wrap">
+        <div class="login-card">
+          <div class="login-title" id="loginTitle">Owner Login</div>
+          <div class="login-subtitle" id="loginSubtitle">तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.</div>
+
+          <div class="form">
+            <input type="text" id="ownerPhone" class="input" placeholder="नोंदणीकृत मोबाइल नंबर">
+            <input type="password" id="ownerPassword" class="input" placeholder="पासवर्ड">
+
+            <button class="login-btn" id="loginBtn" onclick="ownerLogin()">Login</button>
+
+            <a href="register.html">
+              <button class="register-btn" type="button" id="registerBtn">New Partner? Register Your Mess</button>
+            </a>
+
+            <div class="status" id="loginStatus"></div>
+          </div>
+
+          <div class="bottom-note" id="bottomNote">एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.</div>
+          <div class="footer">© 2026 Meal Buzz Partner</div>
+        </div>
+      </section>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
