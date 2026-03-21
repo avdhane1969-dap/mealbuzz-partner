@@ -1,15 +1,458 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meal Buzz Partner</title>
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --bg:#0b0d12;
+      --card:rgba(20,24,32,0.78);
+      --line:rgba(255,255,255,0.10);
+      --text:#f5f7fb;
+      --muted:#c8cfda;
+      --accent:#ff8a00;
+      --accent2:#ffb347;
+      --shadow:0 18px 44px rgba(0,0,0,0.30);
+    }
+
+    body{
+      font-family:'Inter', Arial, sans-serif;
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,0.10), transparent 22%),
+        linear-gradient(180deg,#0b0d12 0%, #141925 100%);
+      overflow-x:hidden;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    .page{
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px 16px;
+    }
+
+    .bg{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.60) 58%, rgba(0,0,0,0.82) 100%),
+        radial-gradient(circle at top right, rgba(255,138,0,0.18), transparent 28%),
+        url('partner-bg.jpg') center/cover no-repeat;
+      z-index:0;
+    }
+
+    .shell{
+      position:relative;
+      z-index:1;
+      width:min(1100px, 100%);
+      display:grid;
+      gap:20px;
+    }
+
+    .hero-card,
+    .login-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero-card::before,
+    .login-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+      pointer-events:none;
+    }
+
+    .hero-inner,
+    .login-inner{
+      position:relative;
+      z-index:1;
+    }
+
+    .hero-card{
+      padding:22px 18px 20px;
+    }
+
+    .brand{
+      margin-bottom:22px;
+    }
+
+    .brand h1{
+      font-family:'Poppins', sans-serif;
+      font-size:30px;
+      line-height:1;
+      background:linear-gradient(90deg,#ffffff 0%, #ffdcb3 35%, #ffb347 62%, #ff8a00 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+
+    .brand p{
+      color:#dde4ef;
+      font-size:11px;
+      margin-top:6px;
+      letter-spacing:1.8px;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+
+    .eyebrow{
+      color:#ffbe63;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+
+    .hero-title{
+      font-family:'Poppins', sans-serif;
+      font-size:clamp(28px, 8vw, 48px);
+      line-height:1.12;
+      margin-bottom:12px;
+    }
+
+    .hero-title .accent{
+      color:#ffbe63;
+    }
+
+    .hero-subtitle{
+      color:#eef3fb;
+      font-size:16px;
+      line-height:1.8;
+      margin-bottom:10px;
+      max-width:700px;
+    }
+
+    .hero-english{
+      color:#bfc8d6;
+      font-size:14px;
+      line-height:1.8;
+      max-width:720px;
+    }
+
+    .mini-points{
+      display:grid;
+      gap:10px;
+      margin-top:22px;
+    }
+
+    .mini-point{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      color:#e8edf5;
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .mini-point span{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#ffb347;
+      margin-top:6px;
+      flex-shrink:0;
+    }
+
+    .login-card{
+      padding:20px;
+    }
+
+    .login-title{
+      font-family:'Poppins', sans-serif;
+      font-size:28px;
+      margin-bottom:8px;
+    }
+
+    .login-subtitle{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+      margin-bottom:18px;
+    }
+
+    .form{
+      display:grid;
+      gap:12px;
+    }
+
+    .input{
+      width:100%;
+      background:rgba(255,255,255,0.05);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:16px;
+      padding:15px 16px;
+      outline:none;
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input::placeholder{
+      color:rgba(255,255,255,0.58);
+    }
+
+    .login-btn,
+    .register-btn{
+      width:100%;
+      padding:15px 16px;
+      border:none;
+      border-radius:16px;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      font-family:inherit;
+    }
+
+    .login-btn{
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      color:#fff;
+      box-shadow:0 14px 28px rgba(255,138,0,0.20);
+    }
+
+    .register-btn{
+      background:rgba(255,255,255,0.05);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .status{
+      min-height:22px;
+      font-size:14px;
+      color:#90ee90;
+      margin-top:4px;
+    }
+
+    .status.error{
+      color:#ff9d9d;
+    }
+
+    .bottom-note{
+      margin-top:16px;
+      color:#b5becb;
+      font-size:13px;
+      line-height:1.7;
+      text-align:center;
+    }
+
+    .bottom-note a{
+      color:#ffbe63;
+      font-weight:700;
+    }
+
+    .footer{
+      margin-top:8px;
+      text-align:center;
+      color:#aeb7c4;
+      font-size:12px;
+      line-height:1.7;
+    }
+
+    @media (min-width:900px){
+      .shell{
+        grid-template-columns:1.15fr 0.85fr;
+        align-items:center;
+      }
+
+      .hero-card{
+        min-height:640px;
+        display:flex;
+        align-items:center;
+      }
+
+      .hero-inner{
+        padding:10px 8px;
+      }
+
+      .login-card{
+        min-height:560px;
+        display:flex;
+        align-items:center;
+      }
+
+      .login-inner{
+        width:100%;
+      }
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; background:#0d0f14; color:white; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0;">
-  <div style="text-align:center;">
-    <h1>Meal Buzz Partner</h1>
-    <p>Owner portal is coming up.</p>
-    <p>Next step: login page.</p>
+<body>
+
+  <div class="page">
+    <div class="bg"></div>
+
+    <div class="shell">
+      <section class="hero-card">
+        <div class="hero-inner">
+          <div class="brand">
+            <h1>Meal Buzz Partner</h1>
+            <p>Owner Portal</p>
+          </div>
+
+          <div class="eyebrow">Partner growth platform</div>
+
+          <h2 class="hero-title">
+            <span class="accent">चव तुमची,</span><br>
+            पोहोच आमची
+          </h2>
+
+          <p class="hero-subtitle">
+            तुमच्या मेसला द्या नव्या ग्राहकांची वाट
+          </p>
+
+          <p class="hero-english">
+            Your Taste, Our Reach — Open new paths for your mess to reach customers.
+          </p>
+
+          <div class="mini-points">
+            <div class="mini-point">
+              <span></span>
+              <div>रोजचा मेन्यू अपडेट करा आणि जवळच्या लोकांपर्यंत पोहोचा</div>
+            </div>
+
+            <div class="mini-point">
+              <span></span>
+              <div>तुमच्या मेसची माहिती, मेन्यू आणि प्रतिमा एका ठिकाणी सांभाळा</div>
+            </div>
+
+            <div class="mini-point">
+              <span></span>
+              <div>तुमच्या मेसला अधिक लोकांच्या नजरेत आणण्यासाठी सोपा पार्टनर पोर्टल</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="login-card">
+        <div class="login-inner">
+          <h3 class="login-title">Owner Login</h3>
+          <p class="login-subtitle">
+            तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.
+          </p>
+
+          <div class="form">
+            <input
+              type="text"
+              id="ownerPhone"
+              class="input"
+              placeholder="नोंदणीकृत मोबाइल नंबर"
+            />
+
+            <input
+              type="password"
+              id="ownerPassword"
+              class="input"
+              placeholder="पासवर्ड"
+            />
+
+            <button class="login-btn" onclick="ownerLogin()">Login</button>
+
+            <a href="register.html">
+              <button class="register-btn" type="button">New Partner? Register Your Mess</button>
+            </a>
+
+            <div class="status" id="loginStatus"></div>
+          </div>
+
+          <div class="bottom-note">
+            एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.
+          </div>
+
+          <div class="footer">
+            © 2026 Meal Buzz Partner
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://iinvhwsbnvmcujyrzlxe.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_fwhxfVqWpDrro8hkQbQQRA_1crMexZv";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function setLoginStatus(message, isError = false) {
+      const box = document.getElementById("loginStatus");
+      box.innerText = message;
+      box.className = isError ? "status error" : "status";
+    }
+
+    const savedOwnerPhone = localStorage.getItem("ownerPhone");
+    if (savedOwnerPhone) {
+      document.getElementById("ownerPhone").value = savedOwnerPhone;
+    }
+
+    async function ownerLogin() {
+      const phone = document.getElementById("ownerPhone").value.trim();
+      const password = document.getElementById("ownerPassword").value.trim();
+
+      if (!phone || !password) {
+        setLoginStatus("कृपया मोबाइल नंबर आणि पासवर्ड भरा.", true);
+        return;
+      }
+
+      setLoginStatus("Logging in...");
+
+      const { data, error } = await sb
+        .from("mess")
+        .select("*")
+        .eq("contact", phone)
+        .eq("password", password)
+        .limit(1);
+
+      if (error) {
+        console.log(error);
+        setLoginStatus("लॉगिन करताना अडचण आली.", true);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        setLoginStatus("मोबाइल नंबर किंवा पासवर्ड चुकीचा आहे.", true);
+        return;
+      }
+
+      const owner = data[0];
+
+      localStorage.setItem("ownerPhone", phone);
+      localStorage.setItem("ownerMessId", owner.id);
+      localStorage.setItem("ownerMessName", owner.name || "");
+
+      setLoginStatus("लॉगिन यशस्वी 🎉");
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 500);
+    }
+  </script>
+
 </body>
 </html>
