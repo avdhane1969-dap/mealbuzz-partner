@@ -169,42 +169,16 @@
       margin-bottom:16px;
     }
 
-    .choice-grid{
-      display:grid;
-      gap:12px;
-      margin-bottom:16px;
-    }
-
-    .choice-label{
+    .slot-banner{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:14px;
+      background:rgba(255,152,0,0.12);
+      border:1px solid rgba(255,191,102,0.26);
+      color:#ffd699;
       font-size:13px;
       font-weight:800;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      color:#ffcc80;
-      margin-bottom:8px;
-    }
-
-    .choice-buttons{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-    }
-
-    .choice-btn{
-      padding:14px 12px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,0.04);
-      color:#fff;
-      font-size:14px;
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    .choice-btn.active{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      border-color:transparent;
-      color:#fff;
+      margin-bottom:14px;
     }
 
     .menu-panel{
@@ -231,6 +205,38 @@
       color:var(--muted);
       font-size:13px;
       line-height:1.7;
+    }
+
+    .choice-label{
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:#ffcc80;
+      margin-bottom:8px;
+    }
+
+    .choice-buttons{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:6px;
+    }
+
+    .choice-btn{
+      padding:14px 12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      font-size:14px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .choice-btn.active{
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      border-color:transparent;
     }
 
     .menu-input{
@@ -264,6 +270,34 @@
       background:rgba(255,255,255,0.08);
       color:#fff;
       border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .file-box{
+      display:grid;
+      gap:8px;
+    }
+
+    .file-box label{
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:#ffcc80;
+    }
+
+    .file-input{
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.06);
+      color:#fff;
+    }
+
+    .file-note{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.6;
     }
 
     .save-row{
@@ -323,9 +357,6 @@
         grid-template-columns:1.15fr 0.85fr;
         align-items:start;
       }
-      .choice-grid{
-        grid-template-columns:1fr 1fr;
-      }
       .info-grid{
         grid-template-columns:1fr 1fr;
       }
@@ -359,30 +390,21 @@
     <div class="card welcome">
       <span class="badge" id="loggedInBadge">Logged in</span>
       <h2 id="welcomeTitle">तुमच्या मेसचे अपडेट इथून करा</h2>
-      <p id="welcomeSub">आजचा स्लॉट निवडा, मेन्यू टाका, प्रकार निवडा आणि सेव्ह करा.</p>
+      <p id="welcomeSub">टाइमनुसार Morning किंवा Night update panel दिसेल.</p>
     </div>
 
     <div class="grid">
       <div class="card">
-        <div class="section-title" id="menuSectionTitle">Daily Menu Update</div>
-        <div class="section-sub" id="menuSectionSub">Morning किंवा Night निवडा. मग Veg / Non-Veg / Both निवडा.</div>
+        <div class="section-title" id="menuSectionTitle">Menu Update</div>
+        <div class="section-sub" id="menuSectionSub">12 AM ते 4 PM फक्त Morning update. 4 PM नंतर फक्त Night update.</div>
+        <div class="slot-banner" id="slotBanner">Morning Update Time</div>
 
-        <div class="choice-grid">
-          <div>
-            <div class="choice-label" id="slotLabel">Select Slot</div>
-            <div class="choice-buttons">
-              <button class="choice-btn active" id="morningBtn" onclick="setSlot('morning')">Morning</button>
-              <button class="choice-btn" id="nightBtn" onclick="setSlot('night')">Night</button>
-            </div>
-          </div>
-
-          <div>
-            <div class="choice-label" id="typeLabel">Select Type</div>
-            <div class="choice-buttons">
-              <button class="choice-btn active" id="vegBtn" onclick="setType('veg')">Veg</button>
-              <button class="choice-btn" id="nonvegBtn" onclick="setType('nonveg')">Non-Veg</button>
-              <button class="choice-btn" id="bothBtn" onclick="setType('both')">Both</button>
-            </div>
+        <div>
+          <div class="choice-label" id="typeLabel">Select Type</div>
+          <div class="choice-buttons">
+            <button class="choice-btn active" id="vegBtn" onclick="setType('veg')">Veg</button>
+            <button class="choice-btn" id="nonvegBtn" onclick="setType('nonveg')">Non-Veg</button>
+            <button class="choice-btn" id="bothBtn" onclick="setType('both')">Both</button>
           </div>
         </div>
 
@@ -405,7 +427,7 @@
           </div>
 
           <div class="info-item">
-            <div class="k" id="infoSlotKey">Selected Slot</div>
+            <div class="k" id="infoSlotKey">Current Slot</div>
             <div class="v" id="infoSelectedSlot">Morning</div>
           </div>
 
@@ -448,10 +470,9 @@
         logoutBtn: "Logout",
         loggedInBadge: "Logged in",
         welcomeTitle: "तुमच्या मेसचे अपडेट इथून करा",
-        welcomeSub: "आजचा स्लॉट निवडा, मेन्यू टाका, प्रकार निवडा आणि सेव्ह करा.",
-        menuSectionTitle: "Daily Menu Update",
-        menuSectionSub: "Morning किंवा Night निवडा. मग Veg / Non-Veg / Both निवडा.",
-        slotLabel: "Select Slot",
+        welcomeSub: "टाइमनुसार Morning किंवा Night update panel दिसेल.",
+        menuSectionTitle: "Menu Update",
+        menuSectionSub: "12 AM ते 4 PM फक्त Morning update. 4 PM नंतर फक्त Night update.",
         typeLabel: "Select Type",
         morning: "Morning",
         night: "Night",
@@ -461,7 +482,7 @@
         sideTitle: "Current Owner Info",
         sideSub: "खाली login केलेल्या mess ची माहिती दिसेल.",
         infoNameKey: "Mess Name",
-        infoSlotKey: "Selected Slot",
+        infoSlotKey: "Current Slot",
         infoTypeKey: "Selected Type",
         infoPhoneKey: "Owner Number",
         saveBtn: "Save Update",
@@ -474,7 +495,12 @@
         chipsRice: "Rice Items",
         chipsExtras: "Extras",
         placeholderVeg: "उदा. पनीर मसाला",
-        placeholderNonveg: "उदा. चिकन करी"
+        placeholderNonveg: "उदा. चिकन करी",
+        imageLabelVeg: "Veg Image (optional)",
+        imageLabelNonveg: "Non-Veg Image (optional)",
+        fileNote: "New image नाही टाकली तर जुनी image तशीच राहील.",
+        morningBanner: "Morning Update Time",
+        nightBanner: "Night Update Time"
       },
       en: {
         portalText: "Owner Dashboard",
@@ -482,10 +508,9 @@
         logoutBtn: "Logout",
         loggedInBadge: "Logged in",
         welcomeTitle: "Update your mess from here",
-        welcomeSub: "Select today’s slot, choose type, enter menu and save.",
-        menuSectionTitle: "Daily Menu Update",
-        menuSectionSub: "Choose Morning or Night. Then choose Veg / Non-Veg / Both.",
-        slotLabel: "Select Slot",
+        welcomeSub: "You will see Morning or Night update panel based on current time.",
+        menuSectionTitle: "Menu Update",
+        menuSectionSub: "12 AM to 4 PM only Morning update. After 4 PM only Night update.",
         typeLabel: "Select Type",
         morning: "Morning",
         night: "Night",
@@ -495,7 +520,7 @@
         sideTitle: "Current Owner Info",
         sideSub: "Your logged-in mess info appears here.",
         infoNameKey: "Mess Name",
-        infoSlotKey: "Selected Slot",
+        infoSlotKey: "Current Slot",
         infoTypeKey: "Selected Type",
         infoPhoneKey: "Owner Number",
         saveBtn: "Save Update",
@@ -508,11 +533,22 @@
         chipsRice: "Rice Items",
         chipsExtras: "Extras",
         placeholderVeg: "e.g. Paneer Masala",
-        placeholderNonveg: "e.g. Chicken Curry"
+        placeholderNonveg: "e.g. Chicken Curry",
+        imageLabelVeg: "Veg Image (optional)",
+        imageLabelNonveg: "Non-Veg Image (optional)",
+        fileNote: "If you do not upload a new image, the old image stays.",
+        morningBanner: "Morning Update Time",
+        nightBanner: "Night Update Time"
       }
     };
 
     function t(){ return translations[currentLang]; }
+
+    function getAllowedSlotByTime(){
+      const now = new Date();
+      const hour = now.getHours();
+      return hour >= 16 ? "night" : "morning";
+    }
 
     async function loadOwnerInfo(){
       if (!ownerMessId) return;
@@ -550,10 +586,7 @@
       document.getElementById("welcomeSub").innerText = t().welcomeSub;
       document.getElementById("menuSectionTitle").innerText = t().menuSectionTitle;
       document.getElementById("menuSectionSub").innerText = t().menuSectionSub;
-      document.getElementById("slotLabel").innerText = t().slotLabel;
       document.getElementById("typeLabel").innerText = t().typeLabel;
-      document.getElementById("morningBtn").innerText = t().morning;
-      document.getElementById("nightBtn").innerText = t().night;
       document.getElementById("vegBtn").innerText = t().veg;
       document.getElementById("nonvegBtn").innerText = t().nonveg;
       document.getElementById("bothBtn").innerText = t().both;
@@ -568,14 +601,10 @@
       document.getElementById("mrBtn").classList.toggle("active", currentLang === "mr");
       document.getElementById("enBtn").classList.toggle("active", currentLang === "en");
 
-      renderMenuPanel();
-      updateSideInfo();
-    }
+      document.getElementById("slotBanner").innerText =
+        currentSlot === "morning" ? t().morningBanner : t().nightBanner;
 
-    function setSlot(slot){
-      currentSlot = slot;
-      document.getElementById("morningBtn").classList.toggle("active", slot === "morning");
-      document.getElementById("nightBtn").classList.toggle("active", slot === "night");
+      renderMenuPanel();
       updateSideInfo();
     }
 
@@ -592,6 +621,8 @@
       document.getElementById("infoSelectedSlot").innerText = currentSlot === "morning" ? t().morning : t().night;
       document.getElementById("infoSelectedType").innerText =
         currentType === "veg" ? t().veg : currentType === "nonveg" ? t().nonveg : t().both;
+      document.getElementById("slotBanner").innerText =
+        currentSlot === "morning" ? t().morningBanner : t().nightBanner;
     }
 
     function addItem(textareaId, item){
@@ -642,15 +673,23 @@
           </div>
         </div>
       `;
-    }
+      }
 
     function menuBox(title, desc, textareaId, placeholder, isVegBox){
+      const imageLabel = isVegBox ? t().imageLabelVeg : t().imageLabelNonveg;
+      const fileId = isVegBox ? "vegImageFile" : "nonvegImageFile";
+
       return `
         <div class="menu-box">
           <h3>${title}</h3>
           <p>${desc}</p>
           <textarea id="${textareaId}" class="menu-input" placeholder="${placeholder}"></textarea>
           ${chipRows(textareaId, isVegBox)}
+          <div class="file-box">
+            <label for="${fileId}">${imageLabel}</label>
+            <input type="file" id="${fileId}" class="file-input" accept="image/*">
+            <div class="file-note">${t().fileNote}</div>
+          </div>
         </div>
       `;
     }
@@ -663,99 +702,197 @@
           menuBox(t().vegBoxTitle, t().vegBoxDesc, "vegMenuText", t().placeholderVeg, true);
       } else if (currentType === "nonveg") {
         panel.innerHTML =
-        menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", t().placeholderNonveg, false);
-    } else {
-      panel.innerHTML =
-        menuBox(t().vegBoxTitle, t().vegBoxDesc, "vegMenuText", t().placeholderVeg, true) +
-        menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", t().placeholderNonveg, false);
-    }
-  }
-
-  async function saveDashboard(){
-    const status = document.getElementById("panelStatus");
-    status.className = "status";
-    status.innerText = "Saving update...";
-
-    const ownerMessId = localStorage.getItem("ownerMessId");
-
-    if (!ownerMessId) {
-      status.className = "status error";
-      status.innerText = "ownerMessId not found. Please login again.";
-      return;
-    }
-
-    let vegMenu = "";
-    let nonvegMenu = "";
-
-    if (currentType === "veg") {
-      vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
-      if (!vegMenu) {
-        status.className = "status error";
-        status.innerText = "Please enter veg menu.";
-        return;
+          menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", t().placeholderNonveg, false);
+      } else {
+        panel.innerHTML =
+          menuBox(t().vegBoxTitle, t().vegBoxDesc, "vegMenuText", t().placeholderVeg, true) +
+          menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", t().placeholderNonveg, false);
       }
     }
 
-    if (currentType === "nonveg") {
-      nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
-      if (!nonvegMenu) {
-        status.className = "status error";
-        status.innerText = "Please enter non-veg menu.";
+    async function uploadImage(file, prefix){
+      if (!file) return null;
+
+      const fileName = `${prefix}-${Date.now()}-${file.name}`;
+      const { error: uploadError } = await sb.storage.from("mess-images").upload(fileName, file);
+
+      if (uploadError) {
+        console.log("UPLOAD ERROR:", uploadError);
+        return { error: true };
+      }
+
+      const { data: publicData } = sb.storage.from("mess-images").getPublicUrl(fileName);
+      return publicData.publicUrl;
+    }
+
+    async function loadSavedMenu(){
+      const { data, error } = await sb
+        .from("mess")
+        .select(`
+          morning_menu_type,
+          morning_veg_menu,
+          morning_nonveg_menu,
+          night_menu_type,
+          night_veg_menu,
+          night_nonveg_menu
+        `)
+        .eq("id", Number(ownerMessId))
+        .single();
+
+      if (error || !data) {
+        console.log("LOAD MENU ERROR:", error);
         return;
+      }
+
+      const slotType = currentSlot === "morning" ? data.morning_menu_type : data.night_menu_type;
+      currentType = slotType || "veg";
+
+      document.getElementById("vegBtn").classList.toggle("active", currentType === "veg");
+      document.getElementById("nonvegBtn").classList.toggle("active", currentType === "nonveg");
+      document.getElementById("bothBtn").classList.toggle("active", currentType === "both");
+
+      renderMenuPanel();
+      updateSideInfo();
+
+      if (currentSlot === "morning") {
+        if (currentType === "veg") {
+          const box = document.getElementById("vegMenuText");
+          if (box) box.value = data.morning_veg_menu || "";
+        } else if (currentType === "nonveg") {
+          const box = document.getElementById("nonvegMenuText");
+          if (box) box.value = data.morning_nonveg_menu || "";
+        } else {
+          const vegBox = document.getElementById("vegMenuText");
+          const nonvegBox = document.getElementById("nonvegMenuText");
+          if (vegBox) vegBox.value = data.morning_veg_menu || "";
+          if (nonvegBox) nonvegBox.value = data.morning_nonveg_menu || "";
+        }
+      } else {
+        if (currentType === "veg") {
+          const box = document.getElementById("vegMenuText");
+          if (box) box.value = data.night_veg_menu || "";
+        } else if (currentType === "nonveg") {
+          const box = document.getElementById("nonvegMenuText");
+          if (box) box.value = data.night_nonveg_menu || "";
+        } else {
+          const vegBox = document.getElementById("vegMenuText");
+          const nonvegBox = document.getElementById("nonvegMenuText");
+          if (vegBox) vegBox.value = data.night_veg_menu || "";
+          if (nonvegBox) nonvegBox.value = data.night_nonveg_menu || "";
+        }
       }
     }
 
-    if (currentType === "both") {
-      vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
-      nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
+    async function saveDashboard(){
+      const status = document.getElementById("panelStatus");
+      status.className = "status";
+      status.innerText = "Saving update...";
 
-      if (!vegMenu && !nonvegMenu) {
+      if (!ownerMessId) {
         status.className = "status error";
-        status.innerText = "Please enter at least one menu.";
+        status.innerText = "ownerMessId not found. Please login again.";
         return;
       }
+
+      let vegMenu = "";
+      let nonvegMenu = "";
+
+      if (currentType === "veg") {
+        vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
+        if (!vegMenu) {
+          status.className = "status error";
+          status.innerText = t().fillMenu;
+          return;
+        }
+      }
+
+      if (currentType === "nonveg") {
+        nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
+        if (!nonvegMenu) {
+          status.className = "status error";
+          status.innerText = t().fillMenu;
+          return;
+        }
+      }
+
+      if (currentType === "both") {
+        vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
+        nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
+
+        if (!vegMenu && !nonvegMenu) {
+          status.className = "status error";
+          status.innerText = t().fillMenu;
+          return;
+        }
+      }
+
+      const vegFile = document.getElementById("vegImageFile")?.files?.[0];
+      const nonvegFile = document.getElementById("nonvegImageFile")?.files?.[0];
+
+      let vegImageUrl = null;
+      let nonvegImageUrl = null;
+
+      if (vegFile) {
+        vegImageUrl = await uploadImage(vegFile, "veg");
+        if (vegImageUrl && vegImageUrl.error) {
+          status.className = "status error";
+          status.innerText = "Veg image upload failed.";
+          return;
+        }
+      }
+
+      if (nonvegFile) {
+        nonvegImageUrl = await uploadImage(nonvegFile, "nonveg");
+        if (nonvegImageUrl && nonvegImageUrl.error) {
+          status.className = "status error";
+          status.innerText = "Non-veg image upload failed.";
+          return;
+        }
+      }
+
+      const payload = {
+        [`${currentSlot}_menu_type`]: currentType,
+        [`${currentSlot}_veg_menu`]: vegMenu || null,
+        [`${currentSlot}_nonveg_menu`]: nonvegMenu || null,
+        [`${currentSlot}_menu_updated_at`]: new Date().toISOString()
+      };
+
+      if (vegImageUrl) payload.veg_image_url = vegImageUrl;
+      if (nonvegImageUrl) payload.nonveg_image_url = nonvegImageUrl;
+
+      const { data, error } = await sb
+        .from("mess")
+        .update(payload)
+        .eq("id", Number(ownerMessId))
+        .select();
+
+      if (error) {
+        console.log("UPDATE ERROR:", error);
+        status.className = "status error";
+        status.innerText = "Save failed: " + (error.message || JSON.stringify(error));
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        status.className = "status error";
+        status.innerText = "No row updated. Please login again.";
+        return;
+      }
+
+      status.className = "status";
+      status.innerText = "Menu saved successfully.";
     }
 
-    const payload = {
-      [`${currentSlot}_menu_type`]: currentType,
-      [`${currentSlot}_veg_menu`]: vegMenu || null,
-      [`${currentSlot}_nonveg_menu`]: nonvegMenu || null,
-      [`${currentSlot}_menu_updated_at`]: new Date().toISOString()
-    };
-
-    const { data, error } = await sb
-      .from("mess")
-      .update(payload)
-      .eq("id", Number(ownerMessId))
-      .select();
-
-    if (error) {
-      console.log("UPDATE ERROR:", error);
-      status.className = "status error";
-      status.innerText = "Save failed: " + (error.message || JSON.stringify(error));
-      return;
+    function logoutOwner(){
+      localStorage.removeItem("ownerMessId");
+      localStorage.removeItem("ownerMessName");
+      window.location.href = "index.html";
     }
 
-    if (!data || data.length === 0) {
-      status.className = "status error";
-      status.innerText = "No row updated. Please login again.";
-      return;
-    }
-
-    status.className = "status";
-    status.innerText = "Menu saved successfully.";
-  }
-
-  function logoutOwner(){
-    localStorage.removeItem("ownerMessId");
-    localStorage.removeItem("ownerMessName");
-    window.location.href = "index.html";
-  }
-
-  setLanguage(currentLang);
-  setSlot("morning");
-  setType("veg");
-  loadOwnerInfo();
-</script>
+    currentSlot = getAllowedSlotByTime();
+    setLanguage(currentLang);
+    loadOwnerInfo();
+    loadSavedMenu();
+  </script>
 </body>
 </html>
