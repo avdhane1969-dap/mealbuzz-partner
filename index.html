@@ -16,17 +16,19 @@
     }
 
     :root{
+      --bg:#0b0d12;
       --text:#f5f7fb;
-      --muted:#d9dee7;
+      --muted:#d6dde8;
       --accent:#ff9800;
-      --accent2:#ffb74d;
+      --accent2:#ffbf66;
+      --card:rgba(12,14,20,0.72);
+      --border:rgba(255,255,255,0.12);
     }
 
     body{
       font-family:'Inter',sans-serif;
-      min-height:100vh;
+      background:var(--bg);
       color:var(--text);
-      background:#0b0d12;
     }
 
     button,input{
@@ -38,17 +40,30 @@
       color:inherit;
     }
 
-    .page{
+    .hero{
+      position:relative;
       min-height:100vh;
+      background:url("Mealbuzzpartner.jpg") center/cover no-repeat;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.28) 50%, rgba(0,0,0,0.52) 100%),
-        url("mealbuzzpartner.jpg") center/cover no-repeat;
-      padding:18px 16px 28px;
+        linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.12) 22%, rgba(0,0,0,0.28) 55%, rgba(0,0,0,0.72) 100%);
+      pointer-events:none;
     }
 
     .topbar{
-      width:min(1120px,100%);
-      margin:0 auto 16px;
+      position:relative;
+      z-index:2;
+      width:min(1180px,100%);
+      margin:0 auto;
+      padding:20px 16px 0;
       display:flex;
       justify-content:flex-end;
     }
@@ -58,10 +73,11 @@
       gap:6px;
       padding:6px;
       border-radius:18px;
-      background:rgba(15,18,24,0.22);
+      background:rgba(10,12,18,0.42);
       border:1px solid rgba(255,255,255,0.14);
       backdrop-filter:blur(8px);
       -webkit-backdrop-filter:blur(8px);
+      box-shadow:0 10px 26px rgba(0,0,0,0.22);
     }
 
     .lang-btn{
@@ -80,104 +96,96 @@
       color:#fff;
     }
 
-    .wrap{
-      width:min(1120px,100%);
-      margin:0 auto;
-      display:grid;
-      gap:18px;
-    }
-
-    .hero{
-      min-height:62vh;
-      display:flex;
-      align-items:flex-end;
-      padding:22px;
-      border-radius:30px;
-      position:relative;
-      overflow:hidden;
-      background:rgba(0,0,0,0.04);
-      border:1px solid rgba(255,255,255,0.08);
-    }
-
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.14) 50%, rgba(0,0,0,0.44) 100%);
-      pointer-events:none;
-    }
-
     .hero-content{
       position:relative;
-      z-index:1;
-      max-width:760px;
+      z-index:2;
+      width:min(1180px,100%);
+      margin:0 auto;
+      padding:56px 16px 34px;
+      display:flex;
+      align-items:flex-end;
+      min-height:calc(100vh - 90px);
     }
 
-    .brand{
-      margin-bottom:18px;
+    .content-box{
+      width:min(760px,100%);
     }
 
-    .brand h1{
-      font-family:'Poppins',sans-serif;
-      font-size:clamp(34px,8vw,64px);
-      line-height:1.02;
-      font-weight:800;
-      letter-spacing:-1px;
-      text-shadow:0 6px 24px rgba(0,0,0,0.35);
-    }
-
-    .brand p{
+    .brand-mini{
       font-size:12px;
       letter-spacing:3px;
       text-transform:uppercase;
-      color:#f0f4fa;
+      color:#eef3fa;
       font-weight:700;
-      margin-top:8px;
+      margin-bottom:14px;
+    }
+
+    .main-title{
+      font-family:'Poppins',sans-serif;
+      font-size:clamp(40px,9vw,78px);
+      line-height:0.98;
+      margin-bottom:10px;
+      font-weight:800;
+      letter-spacing:-1.4px;
+      background:linear-gradient(90deg,#ffffff 0%, #fff4e8 30%, #ffd699 58%, #ffb347 76%, #ff9800 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-shadow:0 8px 30px rgba(0,0,0,0.18);
+    }
+
+    .portal{
+      font-size:13px;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      color:#eef3fa;
+      font-weight:800;
+      margin-bottom:18px;
     }
 
     .eyebrow{
-      color:#ffca7a;
       font-size:12px;
-      font-weight:800;
-      letter-spacing:1.4px;
+      letter-spacing:1.6px;
       text-transform:uppercase;
+      color:#ffcc80;
+      font-weight:800;
       margin-bottom:12px;
-      text-shadow:0 4px 18px rgba(0,0,0,0.28);
     }
 
-    .hero-title{
+    .headline{
       font-family:'Poppins',sans-serif;
-      font-size:clamp(34px,9vw,72px);
-      line-height:1.04;
-      margin-bottom:14px;
-      text-shadow:0 6px 28px rgba(0,0,0,0.38);
+      font-size:clamp(34px,8vw,68px);
+      line-height:1.03;
+      margin-bottom:16px;
+      font-weight:800;
+      color:#fff;
+      max-width:650px;
     }
 
-    .accent{
-      color:#ffbe63;
+    .headline .accent{
+      color:#ffbf66;
     }
 
-    .hero-subtitle{
-      font-size:clamp(19px,4.5vw,30px);
-      font-weight:700;
+    .subheadline{
+      font-size:clamp(19px,4.8vw,30px);
       line-height:1.45;
+      font-weight:700;
+      color:#fff;
       margin-bottom:12px;
-      text-shadow:0 5px 18px rgba(0,0,0,0.34);
+      max-width:760px;
     }
 
-    .hero-desc{
-      max-width:760px;
-      color:#eef2f8;
+    .desc{
       font-size:16px;
       line-height:1.8;
-      text-shadow:0 4px 18px rgba(0,0,0,0.30);
+      color:#edf2f9;
+      max-width:760px;
+      margin-bottom:22px;
     }
 
     .points{
       display:grid;
-      gap:10px;
-      margin-top:22px;
+      gap:12px;
       max-width:760px;
     }
 
@@ -186,9 +194,8 @@
       gap:10px;
       align-items:flex-start;
       font-size:15px;
-      line-height:1.75;
-      color:#f7f9fc;
-      text-shadow:0 4px 18px rgba(0,0,0,0.28);
+      line-height:1.8;
+      color:#f8fbff;
     }
 
     .dot{
@@ -198,22 +205,32 @@
       background:#ffb347;
       margin-top:8px;
       flex-shrink:0;
-      box-shadow:0 0 12px rgba(255,179,71,0.55);
+      box-shadow:0 0 14px rgba(255,179,71,0.55);
+    }
+
+    .login-section{
+      position:relative;
+      z-index:3;
+      width:min(1180px,100%);
+      margin:-8px auto 0;
+      padding:0 16px 28px;
     }
 
     .login-card{
-      background:rgba(10,12,18,0.42);
-      border:1px solid rgba(255,255,255,0.14);
+      width:min(520px,100%);
+      margin-left:auto;
+      background:rgba(10,12,18,0.80);
+      border:1px solid var(--border);
       border-radius:28px;
       padding:22px;
-      box-shadow:0 18px 44px rgba(0,0,0,0.28);
+      box-shadow:0 18px 48px rgba(0,0,0,0.34);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
     }
 
     .login-title{
       font-family:'Poppins',sans-serif;
-      font-size:32px;
+      font-size:30px;
       margin-bottom:8px;
     }
 
@@ -241,7 +258,7 @@
     }
 
     .input::placeholder{
-      color:rgba(255,255,255,0.74);
+      color:rgba(255,255,255,0.72);
     }
 
     .input:focus{
@@ -262,6 +279,7 @@
     .login-btn{
       background:linear-gradient(90deg,var(--accent),var(--accent2));
       color:#fff;
+      box-shadow:0 12px 28px rgba(255,152,0,0.22);
     }
 
     .register-btn{
@@ -296,21 +314,31 @@
       font-size:12px;
     }
 
-    @media (min-width:900px){
+    @media (max-width:900px){
       .hero{
-        min-height:68vh;
-        padding:32px;
+        min-height:auto;
+      }
+
+      .hero-content{
+        min-height:auto;
+        padding:42px 16px 24px;
+        align-items:flex-end;
+      }
+
+      .login-section{
+        margin-top:0;
+        padding-bottom:22px;
       }
 
       .login-card{
-        width:min(520px,100%);
-        margin-left:auto;
+        width:100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
+
+  <section class="hero">
     <div class="topbar">
       <div class="lang-switch">
         <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
@@ -318,39 +346,36 @@
       </div>
     </div>
 
-    <div class="wrap">
-      <section class="hero">
-        <div class="hero-content">
-          <div class="brand">
-            <h1>Meal Buzz Partner</h1>
-            <p id="brandSub">OWNER PORTAL</p>
-          </div>
+    <div class="hero-content">
+      <div class="content-box">
+        <div class="main-title">Meal Buzz Partner</div>
+        <div class="portal" id="portalText">OWNER PORTAL</div>
+        <div class="eyebrow" id="eyebrow">PARTNER GROWTH PLATFORM</div>
 
-          <div class="eyebrow" id="eyebrow">PARTNER GROWTH PLATFORM</div>
-
-          <h2 class="hero-title" id="heroTitle">
-            <span class="accent">चव तुमची,</span><br>पोहोच आमची
-          </h2>
-
-          <div class="hero-subtitle" id="heroSubtitle">
-            तुमच्या मेसला द्या नव्या ग्राहकांची वाट
-          </div>
-
-          <div class="hero-desc" id="heroDesc">
-            Your Taste, Our Reach — Open new paths for your mess to reach customers.
-          </div>
-
-          <div class="points">
-            <div class="point"><span class="dot"></span><div id="point1">रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा</div></div>
-            <div class="point"><span class="dot"></span><div id="point2">तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा</div></div>
-            <div class="point"><span class="dot"></span><div id="point3">तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल</div></div>
-          </div>
+        <div class="headline" id="headline">
+          <span class="accent">चव तुमची,</span><br>पोहोच आमची
         </div>
-      </section>
 
-      <section class="login-card">
-        <h3 class="login-title" id="loginTitle">Owner Login</h3>
-        <p class="login-subtitle" id="loginSubtitle">तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.</p>
+        <div class="subheadline" id="subheadline">
+          तुमच्या मेसला द्या नव्या ग्राहकांची वाट
+        </div>
+
+        <div class="desc" id="desc">
+          Your Taste, Our Reach — Open new paths for your mess to reach customers.
+        </div>
+
+        <div class="points">
+          <div class="point"><span class="dot"></span><div id="point1">रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा</div></div>
+          <div class="point"><span class="dot"></span><div id="point2">तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा</div></div>
+          <div class="point"><span class="dot"></span><div id="point3">तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-section">
+      <div class="login-card">
+        <div class="login-title" id="loginTitle">Owner Login</div>
+        <div class="login-subtitle" id="loginSubtitle">तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.</div>
 
         <div class="form">
           <input type="text" id="ownerPhone" class="input" placeholder="नोंदणीकृत मोबाइल नंबर">
@@ -367,9 +392,9 @@
 
         <div class="bottom-note" id="bottomNote">एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.</div>
         <div class="footer">© 2026 Meal Buzz Partner</div>
-      </section>
+      </div>
     </div>
-  </div>
+  </section>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -380,11 +405,11 @@
     const translations = {
       mr: {
         htmlLang: "mr",
-        brandSub: "OWNER PORTAL",
+        portalText: "OWNER PORTAL",
         eyebrow: "PARTNER GROWTH PLATFORM",
-        heroTitle: `<span class="accent">चव तुमची,</span><br>पोहोच आमची`,
-        heroSubtitle: "तुमच्या मेसला द्या नव्या ग्राहकांची वाट",
-        heroDesc: "Your Taste, Our Reach — Open new paths for your mess to reach customers.",
+        headline: `<span class="accent">चव तुमची,</span><br>पोहोच आमची`,
+        subheadline: "तुमच्या मेसला द्या नव्या ग्राहकांची वाट",
+        desc: "Your Taste, Our Reach — Open new paths for your mess to reach customers.",
         point1: "रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा",
         point2: "तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा",
         point3: "तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल",
@@ -403,11 +428,11 @@
       },
       en: {
         htmlLang: "en",
-        brandSub: "OWNER PORTAL",
+        portalText: "OWNER PORTAL",
         eyebrow: "PARTNER GROWTH PLATFORM",
-        heroTitle: `Your <span class="accent">Taste,</span><br>Our Reach`,
-        heroSubtitle: "Open new paths for your mess to reach customers",
-        heroDesc: "Helping your mess reach more nearby customers with simple daily updates.",
+        headline: `Your <span class="accent">Taste,</span><br>Our Reach`,
+        subheadline: "Open new paths for your mess to reach customers",
+        desc: "Helping your mess reach more nearby customers with simple daily updates.",
         point1: "Update your daily menu and reach more nearby customers",
         point2: "Manage your mess details, menu and photos in one place",
         point3: "A simple partner portal to improve your local visibility",
@@ -428,23 +453,23 @@
 
     let currentLang = localStorage.getItem("partnerLang") || "mr";
 
-    function setLoginStatus(message, isError = false) {
+    function setLoginStatus(message, isError = false){
       const box = document.getElementById("loginStatus");
       box.innerText = message;
       box.className = isError ? "status error" : "status";
     }
 
-    function setLanguage(lang) {
+    function setLanguage(lang){
       currentLang = lang;
       localStorage.setItem("partnerLang", lang);
       const t = translations[lang];
 
       document.documentElement.lang = t.htmlLang;
-      document.getElementById("brandSub").innerText = t.brandSub;
+      document.getElementById("portalText").innerText = t.portalText;
       document.getElementById("eyebrow").innerText = t.eyebrow;
-      document.getElementById("heroTitle").innerHTML = t.heroTitle;
-      document.getElementById("heroSubtitle").innerText = t.heroSubtitle;
-      document.getElementById("heroDesc").innerText = t.heroDesc;
+      document.getElementById("headline").innerHTML = t.headline;
+      document.getElementById("subheadline").innerText = t.subheadline;
+      document.getElementById("desc").innerText = t.desc;
       document.getElementById("point1").innerText = t.point1;
       document.getElementById("point2").innerText = t.point2;
       document.getElementById("point3").innerText = t.point3;
@@ -461,16 +486,16 @@
     }
 
     const savedOwnerPhone = localStorage.getItem("ownerPhone");
-    if (savedOwnerPhone) {
+    if(savedOwnerPhone){
       document.getElementById("ownerPhone").value = savedOwnerPhone;
     }
 
-    async function ownerLogin() {
+    async function ownerLogin(){
       const t = translations[currentLang];
       const phone = document.getElementById("ownerPhone").value.trim();
       const password = document.getElementById("ownerPassword").value.trim();
 
-      if (!phone || !password) {
+      if(!phone || !password){
         setLoginStatus(t.fillFields, true);
         return;
       }
@@ -484,12 +509,12 @@
         .eq("password", password)
         .limit(1);
 
-      if (error) {
+      if(error){
         setLoginStatus(t.loginError, true);
         return;
       }
 
-      if (!data || data.length === 0) {
+      if(!data || data.length === 0){
         setLoginStatus(t.wrongCreds, true);
         return;
       }
