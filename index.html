@@ -554,11 +554,12 @@
         .eq("password", password)
         .limit(1);
 
-      if (error) {
-        console.log(error);
-        setLoginStatus(t.loginError, true);
-        return;
-      }
+if (error) {
+  console.log("UPDATE ERROR:", error);
+  status.className = "status error";
+  status.innerText = "Save failed: " + (error.message || JSON.stringify(error));
+  return;
+}
 
       if (!data || data.length === 0) {
         setLoginStatus(t.wrongCreds, true);
