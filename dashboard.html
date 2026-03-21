@@ -10,9 +10,10 @@
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
+
     :root{
       --bg:#0b0d12;
-      --card:rgba(17,21,29,0.84);
+      --card:rgba(17,21,29,0.86);
       --line:rgba(255,255,255,0.10);
       --text:#f5f7fb;
       --muted:#c7cfdb;
@@ -31,7 +32,7 @@
         linear-gradient(180deg,#0b0d12 0%, #131924 100%);
     }
 
-    button,input,textarea,select{font-family:inherit}
+    button,input,textarea{font-family:inherit}
     a{text-decoration:none;color:inherit}
 
     .page{
@@ -209,6 +210,7 @@
     .menu-panel{
       display:grid;
       gap:16px;
+      margin-top:12px;
     }
 
     .menu-box{
@@ -264,30 +266,11 @@
       border:1px solid rgba(255,255,255,0.10);
     }
 
-    .file-box{
-      display:grid;
-      gap:8px;
-    }
-
-    .file-box label{
-      font-size:13px;
-      font-weight:800;
-      color:#ffcc80;
-      text-transform:uppercase;
-      letter-spacing:1px;
-    }
-
-    .file-note{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.6;
-    }
-
     .save-row{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
-      margin-top:4px;
+      margin-top:10px;
     }
 
     .save-btn{
@@ -302,7 +285,7 @@
       min-height:22px;
       font-size:14px;
       color:#9ff0bb;
-      margin-top:6px;
+      margin-top:8px;
     }
 
     .status.error{color:#ffb3b3}
@@ -483,22 +466,15 @@
         infoPhoneKey: "Owner Number",
         saveBtn: "Save Update",
         fillMenu: "कृपया मेन्यू भरा.",
-        saving: "Saving update...",
-        saveError: "Update save करताना अडचण आली.",
-        saveSuccess: "Menu update saved successfully 🎉",
-        imageFail: "Image upload failed.",
         vegBoxTitle: "Veg Menu",
         nonvegBoxTitle: "Non-Veg Menu",
         vegBoxDesc: "Main bhaji/item + buttons vaprun menu ready kara.",
         nonvegBoxDesc: "Main non-veg item + buttons vaprun menu ready kara.",
-        imageLabelVeg: "Veg Image (optional)",
-        imageLabelNonveg: "Non-Veg Image (optional)",
-        fileNote: "New image nahi takli tar juni image tasich rahil.",
         chipsRoti: "Roti Items",
         chipsRice: "Rice Items",
         chipsExtras: "Extras",
         placeholderVeg: "उदा. पनीर मसाला",
-        placeholderNonveg: "उदा. चिकन करी",
+        placeholderNonveg: "उदा. चिकन करी"
       },
       en: {
         portalText: "Owner Dashboard",
@@ -524,26 +500,42 @@
         infoPhoneKey: "Owner Number",
         saveBtn: "Save Update",
         fillMenu: "Please enter menu.",
-        saving: "Saving update...",
-        saveError: "There was a problem saving the update.",
-        saveSuccess: "Menu update saved successfully 🎉",
-        imageFail: "Image upload failed.",
         vegBoxTitle: "Veg Menu",
         nonvegBoxTitle: "Non-Veg Menu",
         vegBoxDesc: "Enter main bhaji/item and use quick buttons to build menu.",
         nonvegBoxDesc: "Enter main non-veg item and use quick buttons to build menu.",
-        imageLabelVeg: "Veg Image (optional)",
-        imageLabelNonveg: "Non-Veg Image (optional)",
-        fileNote: "If you do not upload a new image, the old image stays.",
         chipsRoti: "Roti Items",
         chipsRice: "Rice Items",
         chipsExtras: "Extras",
         placeholderVeg: "e.g. Paneer Masala",
-        placeholderNonveg: "e.g. Chicken Curry",
+        placeholderNonveg: "e.g. Chicken Curry"
       }
     };
 
     function t(){ return translations[currentLang]; }
+
+    async function loadOwnerInfo(){
+      if (!ownerMessId) return;
+
+      const { data, error } = await sb
+        .from("mess")
+        .select("id, name, contact")
+        .eq("id", Number(ownerMessId))
+        .single();
+
+      if (error || !data) {
+        console.log("LOAD OWNER ERROR:", error);
+        document.getElementById("infoMessName").innerText = ownerMessName || "-";
+        document.getElementById("infoOwnerPhone").innerText = ownerPhone || "-";
+        return;
+      }
+
+      document.getElementById("infoMessName").innerText = data.name || ownerMessName || "-";
+      document.getElementById("infoOwnerPhone").innerText = data.contact || ownerPhone || "-";
+
+      if (data.name) localStorage.setItem("ownerMessName", data.name);
+      if (data.contact) localStorage.setItem("ownerPhone", data.contact);
+    }
 
     function setLanguage(lang){
       currentLang = lang;
@@ -597,11 +589,9 @@
     }
 
     function updateSideInfo(){
-      document.getElementById("infoMessName").innerText = ownerMessName || "-";
       document.getElementById("infoSelectedSlot").innerText = currentSlot === "morning" ? t().morning : t().night;
       document.getElementById("infoSelectedType").innerText =
         currentType === "veg" ? t().veg : currentType === "nonveg" ? t().nonveg : t().both;
-      document.getElementById("infoOwnerPhone").innerText = ownerPhone || "-";
     }
 
     function addItem(textareaId, item){
@@ -654,22 +644,14 @@
       `;
     }
 
-    function menuBox(title, desc, textareaId, fileId, placeholder, isVegBox){
-      const imageLabel = isVegBox ? t().imageLabelVeg : t().imageLabelNonveg;
+    function menuBox(title, desc, textareaId, placeholder, isVegBox){
       return `
         <div class="menu-box">
           <h3>${title}</h3>
           <p>${desc}</p>
-<textarea id="${textareaId}" class="menu-input" placeholder="${placeholder}"></textarea>
-
-      ${chipRows(textareaId, isVegBox)}
-
-      <div class="file-box">
-        <label for="${fileId}">${imageLabel}</label>
-        <input type="file" id="${fileId}" accept="image/*">
-        <div class="file-note">${t().fileNote}</div>
-      </div>
-    </div>
+          <textarea id="${textareaId}" class="menu-input" placeholder="${placeholder}"></textarea>
+          ${chipRows(textareaId, isVegBox)}
+        </div>
       `;
     }
 
@@ -678,112 +660,102 @@
 
       if (currentType === "veg") {
         panel.innerHTML =
-          menuBox(t().vegBoxTitle, t().vegBoxDesc, "vegMenuText", "vegImageFile", t().placeholderVeg, true);
+          menuBox(t().vegBoxTitle, t().vegBoxDesc, "vegMenuText", t().placeholderVeg, true);
       } else if (currentType === "nonveg") {
         panel.innerHTML =
-          menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", "nonvegImageFile", t().placeholderNonveg, false);
-      } else {
-        panel.innerHTML =
-          menuBox(t().vegBoxTitle, t().vegBoxDesc, "vegMenuText", "vegImageFile", t().placeholderVeg, true) +
-          menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", "nonvegImageFile", t().placeholderNonveg, false);
+        menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", t().placeholderNonveg, false);
+    } else {
+      panel.innerHTML =
+        menuBox(t().vegBoxTitle, t().vegBoxDesc, "vegMenuText", t().placeholderVeg, true) +
+        menuBox(t().nonvegBoxTitle, t().nonvegBoxDesc, "nonvegMenuText", t().placeholderNonveg, false);
+    }
+  }
+
+  async function saveDashboard(){
+    const status = document.getElementById("panelStatus");
+    status.className = "status";
+    status.innerText = "Saving update...";
+
+    const ownerMessId = localStorage.getItem("ownerMessId");
+
+    if (!ownerMessId) {
+      status.className = "status error";
+      status.innerText = "ownerMessId not found. Please login again.";
+      return;
+    }
+
+    let vegMenu = "";
+    let nonvegMenu = "";
+
+    if (currentType === "veg") {
+      vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
+      if (!vegMenu) {
+        status.className = "status error";
+        status.innerText = "Please enter veg menu.";
+        return;
       }
     }
 
-    async function uploadImage(file, prefix){
-      if (!file) return null;
-      const fileName = `${prefix}-${Date.now()}-${file.name}`;
-      const { error: uploadError } = await sb.storage.from("mess-images").upload(fileName, file);
-      if (uploadError) return { error: true };
-
-      const { data: publicData } = sb.storage.from("mess-images").getPublicUrl(fileName);
-      return publicData.publicUrl;
+    if (currentType === "nonveg") {
+      nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
+      if (!nonvegMenu) {
+        status.className = "status error";
+        status.innerText = "Please enter non-veg menu.";
+        return;
+      }
     }
 
-   async function saveDashboard(){
-  const status = document.getElementById("panelStatus");
-  status.className = "status";
-  status.innerText = "Saving update...";
+    if (currentType === "both") {
+      vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
+      nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
 
-  const ownerMessId = localStorage.getItem("ownerMessId");
+      if (!vegMenu && !nonvegMenu) {
+        status.className = "status error";
+        status.innerText = "Please enter at least one menu.";
+        return;
+      }
+    }
 
-  if (!ownerMessId) {
-    status.className = "status error";
-    status.innerText = "ownerMessId not found. Please login again.";
-    return;
-  }
+    const payload = {
+      [`${currentSlot}_menu_type`]: currentType,
+      [`${currentSlot}_veg_menu`]: vegMenu || null,
+      [`${currentSlot}_nonveg_menu`]: nonvegMenu || null,
+      [`${currentSlot}_menu_updated_at`]: new Date().toISOString()
+    };
 
-  let vegMenu = "";
-  let nonvegMenu = "";
+    const { data, error } = await sb
+      .from("mess")
+      .update(payload)
+      .eq("id", Number(ownerMessId))
+      .select();
 
-  if (currentType === "veg") {
-    vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
-    if (!vegMenu) {
+    if (error) {
+      console.log("UPDATE ERROR:", error);
       status.className = "status error";
-      status.innerText = "Please enter veg menu.";
+      status.innerText = "Save failed: " + (error.message || JSON.stringify(error));
       return;
     }
-  }
 
-  if (currentType === "nonveg") {
-    nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
-    if (!nonvegMenu) {
+    if (!data || data.length === 0) {
       status.className = "status error";
-      status.innerText = "Please enter non-veg menu.";
+      status.innerText = "No row updated. Please login again.";
       return;
     }
+
+    status.className = "status";
+    status.innerText = "Menu saved successfully.";
   }
 
-  if (currentType === "both") {
-    vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
-    nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
-
-    if (!vegMenu && !nonvegMenu) {
-      status.className = "status error";
-      status.innerText = "Please enter at least one menu.";
-      return;
-    }
+  function logoutOwner(){
+    localStorage.removeItem("ownerMessId");
+    localStorage.removeItem("ownerMessName");
+    window.location.href = "index.html";
   }
 
-  const payload = {
-    [`${currentSlot}_menu_type`]: currentType,
-    [`${currentSlot}_veg_menu`]: vegMenu || null,
-    [`${currentSlot}_nonveg_menu`]: nonvegMenu || null,
-    [`${currentSlot}_menu_updated_at`]: new Date().toISOString()
-  };
-
-  const { data, error } = await sb
-    .from("mess")
-    .update(payload)
-    .eq("id", Number(ownerMessId))
-    .select();
-
-  if (error) {
-    console.log("UPDATE ERROR:", error);
-    status.className = "status error";
-    status.innerText = "Save failed: " + (error.message || JSON.stringify(error));
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    status.className = "status error";
-    status.innerText = "No row updated. Please login again.";
-    return;
-  }
-
-  status.className = "status";
-  status.innerText = "Menu saved successfully.";
-}
-
-      localStorage.removeItem("ownerMessId");
-      localStorage.removeItem("ownerMessName");
-      window.location.href = "index.html";
-    }
-
-    setLanguage(currentLang);
-    setSlot("morning");
-    setType("veg");
-    updateSideInfo();
-  </script>
+  setLanguage(currentLang);
+  setSlot("morning");
+  setType("veg");
+  loadOwnerInfo();
+</script>
 </body>
 </html>
-          
