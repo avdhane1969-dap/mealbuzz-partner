@@ -699,93 +699,81 @@
       return publicData.publicUrl;
     }
 
-    async function saveDashboard(){
-      const status = document.getElementById("panelStatus");
-      status.className = "status";
-      status.innerText = t().saving;
+   async function saveDashboard(){
+  const status = document.getElementById("panelStatus");
+  status.className = "status";
+  status.innerText = "Saving update...";
 
-      let vegMenu = "";
-      let nonvegMenu = "";
+  const ownerMessId = localStorage.getItem("ownerMessId");
 
-      if (currentType === "veg") {
-        vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
-        if (!vegMenu) {
-          status.className = "status error";
-          status.innerText = t().fillMenu;
-          return;
-        }
-      }
+  if (!ownerMessId) {
+    status.className = "status error";
+    status.innerText = "ownerMessId not found. Please login again.";
+    return;
+  }
 
-      if (currentType === "nonveg") {
-        nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
-        if (!nonvegMenu) {
-          status.className = "status error";
-          status.innerText = t().fillMenu;
-          return;
-        }
-      }
+  let vegMenu = "";
+  let nonvegMenu = "";
 
-      if (currentType === "both") {
-        vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
-        nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
-        if (!vegMenu && !nonvegMenu) {
-          status.className = "status error";
-          status.innerText = t().fillMenu;
-          return;
-        }
-      }
-
-      const vegFile = document.getElementById("vegImageFile")?.files?.[0];
-      const nonvegFile = document.getElementById("nonvegImageFile")?.files?.[0];
-
-      let vegImageUrl = null;
-      let nonvegImageUrl = null;
-
-      if (vegFile) {
-        vegImageUrl = await uploadImage(vegFile, "veg");
-        if (vegImageUrl && vegImageUrl.error) {
-          status.className = "status error";
-          status.innerText = t().imageFail;
-          return;
-        }
-      }
-
-      if (nonvegFile) {
-        nonvegImageUrl = await uploadImage(nonvegFile, "nonveg");
-        if (nonvegImageUrl && nonvegImageUrl.error) {
-          status.className = "status error";
-          status.innerText = t().imageFail;
-          return;
-        }
-      }
-
-      const payload = {
-        [`${currentSlot}_menu_type`]: currentType,
-        [`${currentSlot}_veg_menu`]: vegMenu || null,
-        [`${currentSlot}_nonveg_menu`]: nonvegMenu || null,
-        [`${currentSlot}_menu_updated_at`]: new Date().toISOString()
-      };
-
-      if (vegImageUrl) payload.veg_image_url = vegImageUrl;
-      if (nonvegImageUrl) payload.nonveg_image_url = nonvegImageUrl;
-
-      const { error } = await sb
-        .from("mess")
-        .update(payload)
-        .eq("id", ownerMessId);
-
-      if (error) {
-        console.log(error);
-        status.className = "status error";
-        status.innerText = t().saveError;
-        return;
-      }
-
-      status.className = "status";
-      status.innerText = t().saveSuccess;
+  if (currentType === "veg") {
+    vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
+    if (!vegMenu) {
+      status.className = "status error";
+      status.innerText = "Please enter veg menu.";
+      return;
     }
+  }
 
-    function logoutOwner(){
+  if (currentType === "nonveg") {
+    nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
+    if (!nonvegMenu) {
+      status.className = "status error";
+      status.innerText = "Please enter non-veg menu.";
+      return;
+    }
+  }
+
+  if (currentType === "both") {
+    vegMenu = document.getElementById("vegMenuText")?.value.trim() || "";
+    nonvegMenu = document.getElementById("nonvegMenuText")?.value.trim() || "";
+
+    if (!vegMenu && !nonvegMenu) {
+      status.className = "status error";
+      status.innerText = "Please enter at least one menu.";
+      return;
+    }
+  }
+
+  const payload = {
+    [`${currentSlot}_menu_type`]: currentType,
+    [`${currentSlot}_veg_menu`]: vegMenu || null,
+    [`${currentSlot}_nonveg_menu`]: nonvegMenu || null,
+    [`${currentSlot}_menu_updated_at`]: new Date().toISOString()
+  };
+
+  const { data, error } = await sb
+    .from("mess")
+    .update(payload)
+    .eq("id", Number(ownerMessId))
+    .select();
+
+  if (error) {
+    console.log("UPDATE ERROR:", error);
+    status.className = "status error";
+    status.innerText = "Save failed: " + (error.message || JSON.stringify(error));
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    status.className = "status error";
+    status.innerText = "No row updated. Please login again.";
+    return;
+  }
+
+  status.className = "status";
+  status.innerText = "Menu saved successfully.";
+}
+
       localStorage.removeItem("ownerMessId");
       localStorage.removeItem("ownerMessName");
       window.location.href = "index.html";
