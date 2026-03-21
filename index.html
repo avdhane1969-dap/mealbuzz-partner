@@ -16,18 +16,17 @@
     }
 
     :root{
-      --bg:#0b0d12;
       --text:#f5f7fb;
       --muted:#d6dde8;
       --accent:#ff9800;
       --accent2:#ffbf66;
-      --card:rgba(12,14,20,0.72);
+      --card:rgba(10,12,18,0.80);
       --border:rgba(255,255,255,0.12);
     }
 
     body{
       font-family:'Inter',sans-serif;
-      background:var(--bg);
+      background:#0b0d12;
       color:var(--text);
     }
 
@@ -40,21 +39,19 @@
       color:inherit;
     }
 
-    .hero{
-      position:relative;
+    .page{
       min-height:100vh;
-      background:url("mealbuzzpartner.jpg") center/cover no-repeat;
+      background:url("Mealbuzzpartner.jpg") center/cover no-repeat;
+      position:relative;
       display:flex;
       flex-direction:column;
-      justify-content:space-between;
     }
 
-    .hero::before{
+    .page::before{
       content:"";
       position:absolute;
       inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.12) 22%, rgba(0,0,0,0.28) 55%, rgba(0,0,0,0.72) 100%);
+      background:linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.10) 38%, rgba(0,0,0,0.34) 72%, rgba(0,0,0,0.72) 100%);
       pointer-events:none;
     }
 
@@ -73,11 +70,11 @@
       gap:6px;
       padding:6px;
       border-radius:18px;
-      background:rgba(10,12,18,0.42);
+      background:rgba(10,12,18,0.34);
       border:1px solid rgba(255,255,255,0.14);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
-      box-shadow:0 10px 26px rgba(0,0,0,0.22);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      box-shadow:0 10px 26px rgba(0,0,0,0.18);
     }
 
     .lang-btn{
@@ -96,35 +93,26 @@
       color:#fff;
     }
 
-    .hero-content{
+    .hero{
       position:relative;
       z-index:2;
       width:min(1180px,100%);
       margin:0 auto;
-      padding:56px 16px 34px;
+      padding:54px 16px 14px;
+      flex:1;
       display:flex;
       align-items:flex-end;
-      min-height:calc(100vh - 90px);
     }
 
-    .content-box{
+    .hero-box{
       width:min(760px,100%);
-    }
-
-    .brand-mini{
-      font-size:12px;
-      letter-spacing:3px;
-      text-transform:uppercase;
-      color:#eef3fa;
-      font-weight:700;
-      margin-bottom:14px;
     }
 
     .main-title{
       font-family:'Poppins',sans-serif;
       font-size:clamp(40px,9vw,78px);
       line-height:0.98;
-      margin-bottom:10px;
+      margin-bottom:12px;
       font-weight:800;
       letter-spacing:-1.4px;
       background:linear-gradient(90deg,#ffffff 0%, #fff4e8 30%, #ffd699 58%, #ffb347 76%, #ff9800 100%);
@@ -140,86 +128,21 @@
       text-transform:uppercase;
       color:#eef3fa;
       font-weight:800;
-      margin-bottom:18px;
+      text-shadow:0 4px 20px rgba(0,0,0,0.22);
     }
 
-    .eyebrow{
-      font-size:12px;
-      letter-spacing:1.6px;
-      text-transform:uppercase;
-      color:#ffcc80;
-      font-weight:800;
-      margin-bottom:12px;
-    }
-
-    .headline{
-      font-family:'Poppins',sans-serif;
-      font-size:clamp(34px,8vw,68px);
-      line-height:1.03;
-      margin-bottom:16px;
-      font-weight:800;
-      color:#fff;
-      max-width:650px;
-    }
-
-    .headline .accent{
-      color:#ffbf66;
-    }
-
-    .subheadline{
-      font-size:clamp(19px,4.8vw,30px);
-      line-height:1.45;
-      font-weight:700;
-      color:#fff;
-      margin-bottom:12px;
-      max-width:760px;
-    }
-
-    .desc{
-      font-size:16px;
-      line-height:1.8;
-      color:#edf2f9;
-      max-width:760px;
-      margin-bottom:22px;
-    }
-
-    .points{
-      display:grid;
-      gap:12px;
-      max-width:760px;
-    }
-
-    .point{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      font-size:15px;
-      line-height:1.8;
-      color:#f8fbff;
-    }
-
-    .dot{
-      width:10px;
-      height:10px;
-      border-radius:50%;
-      background:#ffb347;
-      margin-top:8px;
-      flex-shrink:0;
-      box-shadow:0 0 14px rgba(255,179,71,0.55);
-    }
-
-    .login-section{
+    .login-wrap{
       position:relative;
       z-index:3;
       width:min(1180px,100%);
-      margin:-8px auto 0;
+      margin:0 auto;
       padding:0 16px 28px;
     }
 
     .login-card{
       width:min(520px,100%);
       margin-left:auto;
-      background:rgba(10,12,18,0.80);
+      background:var(--card);
       border:1px solid var(--border);
       border-radius:28px;
       padding:22px;
@@ -316,17 +239,11 @@
 
     @media (max-width:900px){
       .hero{
-        min-height:auto;
+        padding:44px 16px 10px;
+        min-height:46vh;
       }
 
-      .hero-content{
-        min-height:auto;
-        padding:42px 16px 24px;
-        align-items:flex-end;
-      }
-
-      .login-section{
-        margin-top:0;
+      .login-wrap{
         padding-bottom:22px;
       }
 
@@ -338,7 +255,7 @@
 </head>
 <body>
 
-  <section class="hero">
+  <div class="page">
     <div class="topbar">
       <div class="lang-switch">
         <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
@@ -346,33 +263,14 @@
       </div>
     </div>
 
-    <div class="hero-content">
-      <div class="content-box">
+    <section class="hero">
+      <div class="hero-box">
         <div class="main-title">Meal Buzz Partner</div>
         <div class="portal" id="portalText">OWNER PORTAL</div>
-        <div class="eyebrow" id="eyebrow">PARTNER GROWTH PLATFORM</div>
-
-        <div class="headline" id="headline">
-          <span class="accent">चव तुमची,</span><br>पोहोच आमची
-        </div>
-
-        <div class="subheadline" id="subheadline">
-          तुमच्या मेसला द्या नव्या ग्राहकांची वाट
-        </div>
-
-        <div class="desc" id="desc">
-          Your Taste, Our Reach — Open new paths for your mess to reach customers.
-        </div>
-
-        <div class="points">
-          <div class="point"><span class="dot"></span><div id="point1">रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा</div></div>
-          <div class="point"><span class="dot"></span><div id="point2">तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा</div></div>
-          <div class="point"><span class="dot"></span><div id="point3">तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल</div></div>
-        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="login-section">
+    <section class="login-wrap">
       <div class="login-card">
         <div class="login-title" id="loginTitle">Owner Login</div>
         <div class="login-subtitle" id="loginSubtitle">तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.</div>
@@ -393,8 +291,8 @@
         <div class="bottom-note" id="bottomNote">एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.</div>
         <div class="footer">© 2026 Meal Buzz Partner</div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -406,13 +304,6 @@
       mr: {
         htmlLang: "mr",
         portalText: "OWNER PORTAL",
-        eyebrow: "PARTNER GROWTH PLATFORM",
-        headline: `<span class="accent">चव तुमची,</span><br>पोहोच आमची`,
-        subheadline: "तुमच्या मेसला द्या नव्या ग्राहकांची वाट",
-        desc: "Your Taste, Our Reach — Open new paths for your mess to reach customers.",
-        point1: "रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा",
-        point2: "तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा",
-        point3: "तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल",
         loginTitle: "Owner Login",
         loginSubtitle: "तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.",
         phonePlaceholder: "नोंदणीकृत मोबाइल नंबर",
@@ -429,13 +320,6 @@
       en: {
         htmlLang: "en",
         portalText: "OWNER PORTAL",
-        eyebrow: "PARTNER GROWTH PLATFORM",
-        headline: `Your <span class="accent">Taste,</span><br>Our Reach`,
-        subheadline: "Open new paths for your mess to reach customers",
-        desc: "Helping your mess reach more nearby customers with simple daily updates.",
-        point1: "Update your daily menu and reach more nearby customers",
-        point2: "Manage your mess details, menu and photos in one place",
-        point3: "A simple partner portal to improve your local visibility",
         loginTitle: "Owner Login",
         loginSubtitle: "Login with your registered mobile number and password.",
         phonePlaceholder: "Registered mobile number",
@@ -453,26 +337,19 @@
 
     let currentLang = localStorage.getItem("partnerLang") || "mr";
 
-    function setLoginStatus(message, isError = false){
+    function setLoginStatus(message, isError = false) {
       const box = document.getElementById("loginStatus");
       box.innerText = message;
       box.className = isError ? "status error" : "status";
     }
 
-    function setLanguage(lang){
+    function setLanguage(lang) {
       currentLang = lang;
       localStorage.setItem("partnerLang", lang);
       const t = translations[lang];
 
       document.documentElement.lang = t.htmlLang;
       document.getElementById("portalText").innerText = t.portalText;
-      document.getElementById("eyebrow").innerText = t.eyebrow;
-      document.getElementById("headline").innerHTML = t.headline;
-      document.getElementById("subheadline").innerText = t.subheadline;
-      document.getElementById("desc").innerText = t.desc;
-      document.getElementById("point1").innerText = t.point1;
-      document.getElementById("point2").innerText = t.point2;
-      document.getElementById("point3").innerText = t.point3;
       document.getElementById("loginTitle").innerText = t.loginTitle;
       document.getElementById("loginSubtitle").innerText = t.loginSubtitle;
       document.getElementById("ownerPhone").placeholder = t.phonePlaceholder;
@@ -486,16 +363,16 @@
     }
 
     const savedOwnerPhone = localStorage.getItem("ownerPhone");
-    if(savedOwnerPhone){
+    if (savedOwnerPhone) {
       document.getElementById("ownerPhone").value = savedOwnerPhone;
     }
 
-    async function ownerLogin(){
+    async function ownerLogin() {
       const t = translations[currentLang];
       const phone = document.getElementById("ownerPhone").value.trim();
       const password = document.getElementById("ownerPassword").value.trim();
 
-      if(!phone || !password){
+      if (!phone || !password) {
         setLoginStatus(t.fillFields, true);
         return;
       }
@@ -509,12 +386,12 @@
         .eq("password", password)
         .limit(1);
 
-      if(error){
+      if (error) {
         setLoginStatus(t.loginError, true);
         return;
       }
 
-      if(!data || data.length === 0){
+      if (!data || data.length === 0) {
         setLoginStatus(t.wrongCreds, true);
         return;
       }
