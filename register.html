@@ -91,7 +91,7 @@
       border:1px solid var(--line);
     }
 
-    .lang-btn,.ghost-btn,.submit-btn,.location-btn{
+    .lang-btn,.ghost-btn,.submit-btn,.pin-btn,.clear-btn{
       border:none;
       cursor:pointer;
       border-radius:14px;
@@ -209,13 +209,26 @@
       line-height:1.6;
     }
 
-    .location-btn{
+    .pin-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .pin-btn,.clear-btn{
       padding:14px 16px;
       font-size:14px;
-      background:rgba(255,255,255,0.06);
       color:#fff;
       border:1px solid var(--line);
-      width:100%;
+    }
+
+    .pin-btn{
+      background:rgba(255,255,255,0.06);
+      flex:1;
+    }
+
+    .clear-btn{
+      background:rgba(255,255,255,0.04);
     }
 
     .coords{
@@ -316,7 +329,7 @@
       <div class="card">
         <div class="section-title" id="registerTitle">Register Your Mess</div>
         <div class="section-sub" id="registerSub">
-          Owner details, mess details, current location आणि optional main image भरून registration complete करा.
+          Owner details, mess details, address, pin location आणि main image भरून registration complete करा.
         </div>
 
         <div class="form-grid">
@@ -357,14 +370,20 @@
           </div>
 
           <div class="field-group full">
-            <div class="label" id="locationCaptureLabel">Current Location</div>
-            <button class="location-btn" onclick="captureLocation()" id="captureBtn" type="button">Use Current Location</button>
+            <div class="label" id="pinLabel">Pin Your Mess Location (optional)</div>
+            <div class="pin-actions">
+              <button class="pin-btn" id="pinBtn" type="button" onclick="pinCurrentLocation()">Pin Current Location</button>
+              <button class="clear-btn" id="clearPinBtn" type="button" onclick="clearPinnedLocation()">Clear Pin</button>
+            </div>
+            <div class="helper" id="pinHelper">
+              Current location compulsory नाही. तुम्ही mess वर असाल तर exact pin करू शकता.
+            </div>
           </div>
 
           <div class="field-group full">
             <div class="coords" id="coordsBox">
-              Latitude: Not captured yet<br>
-              Longitude: Not captured yet
+              Latitude: Not pinned yet<br>
+              Longitude: Not pinned yet
             </div>
           </div>
 
@@ -387,7 +406,7 @@
 
           <div class="info-box">
             <div class="k" id="rule2k">Rule 2</div>
-            <div class="v" id="rule2v">Current location capture आवश्यक</div>
+            <div class="v" id="rule2v">Address compulsory आहे</div>
           </div>
 
           <div class="info-box">
@@ -397,7 +416,7 @@
 
           <div class="info-box">
             <div class="k" id="rule4k">Rule 4</div>
-            <div class="v" id="rule4v">Register झाल्यावर direct dashboard open होईल</div>
+            <div class="v" id="rule4v">Pin location optional आहे</div>
           </div>
         </div>
       </div>
@@ -411,15 +430,15 @@
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentLang = localStorage.getItem("partnerLang") || "mr";
-    let currentLat = null;
-    let currentLon = null;
+    let pinnedLat = null;
+    let pinnedLon = null;
 
     const translations = {
       mr: {
         portalText: "Partner Registration",
         backBtn: "Back",
         registerTitle: "Register Your Mess",
-        registerSub: "Owner details, mess details, current location आणि optional main image भरून registration complete करा.",
+        registerSub: "Owner details, mess details, address, pin location आणि main image भरून registration complete करा.",
         ownerNameLabel: "Owner Name",
         phoneLabel: "Mobile Number",
         passwordLabel: "Create Password",
@@ -428,32 +447,34 @@
         priceLabel: "Price",
         imageLabel: "Main Image (optional)",
         imageHelper: "ही default image म्हणून वापरली जाईल. Veg/Non-Veg specific image नंतर update करू शकता.",
-        locationCaptureLabel: "Current Location",
-        captureBtn: "Use Current Location",
+        pinLabel: "Pin Your Mess Location (optional)",
+        pinBtn: "Pin Current Location",
+        clearPinBtn: "Clear Pin",
+        pinHelper: "Current location compulsory नाही. तुम्ही mess वर असाल तर exact pin करू शकता.",
         submitBtn: "Register Mess",
         sideTitle: "Registration Summary",
         sideSub: "एका mobile number वर एकच mess register होईल. Same number ने परत register करता येणार नाही.",
         rule1k: "Rule 1",
         rule1v: "One number = one mess",
         rule2k: "Rule 2",
-        rule2v: "Current location capture आवश्यक",
+        rule2v: "Address compulsory आहे",
         rule3k: "Rule 3",
         rule3v: "Main image optional आहे",
         rule4k: "Rule 4",
-        rule4v: "Register झाल्यावर direct dashboard open होईल",
+        rule4v: "Pin location optional आहे",
         ownerNamePh: "मेस मालकाचे नाव",
         phonePh: "नोंदणीकृत मोबाइल नंबर",
         passPh: "पासवर्ड तयार करा",
         messNamePh: "तुमच्या मेसचे नाव",
         locationPh: "एरिया, पत्ता किंवा location details",
         pricePh: "उदा. ₹80 थाळी / ₹3000 महिना",
-        coordsEmpty: "Latitude: Not captured yet<br>Longitude: Not captured yet",
+        coordsEmpty: "Latitude: Not pinned yet<br>Longitude: Not pinned yet",
         coordsOk: (lat, lon) => `Latitude: ${lat}<br>Longitude: ${lon}`,
-        gettingLocation: "Current location घेतोय...",
-        locationOk: "Location captured successfully.",
-        locationFail: "Location मिळाली नाही. कृपया permission allow करा.",
+        pinLoading: "Location pin करतोय...",
+        pinOk: "Location pinned successfully.",
+        pinFail: "Location मिळाली नाही. कृपया permission allow करा.",
+        pinCleared: "Pinned location cleared.",
         fillAll: "कृपया सगळी आवश्यक माहिती भरा.",
-        captureFirst: "कृपया current location आधी capture करा.",
         checking: "Checking existing mess...",
         numberExists: "Mess already exists with this number.",
         uploading: "Uploading image and saving mess...",
@@ -465,7 +486,7 @@
         portalText: "Partner Registration",
         backBtn: "Back",
         registerTitle: "Register Your Mess",
-        registerSub: "Complete registration with owner details, mess details, current location and an optional main image.",
+        registerSub: "Complete registration with owner details, mess details, address, pinned location and main image.",
         ownerNameLabel: "Owner Name",
         phoneLabel: "Mobile Number",
         passwordLabel: "Create Password",
@@ -474,32 +495,34 @@
         priceLabel: "Price",
         imageLabel: "Main Image (optional)",
         imageHelper: "This will be used as the default image. You can update Veg/Non-Veg specific images later.",
-        locationCaptureLabel: "Current Location",
-        captureBtn: "Use Current Location",
+        pinLabel: "Pin Your Mess Location (optional)",
+        pinBtn: "Pin Current Location",
+        clearPinBtn: "Clear Pin",
+        pinHelper: "Current location is not compulsory. If you are at the mess, you can pin the exact location.",
         submitBtn: "Register Mess",
         sideTitle: "Registration Summary",
         sideSub: "Only one mess can be registered with one mobile number. The same number cannot register again.",
         rule1k: "Rule 1",
         rule1v: "One number = one mess",
         rule2k: "Rule 2",
-        rule2v: "Current location capture is required",
+        rule2v: "Address is compulsory",
         rule3k: "Rule 3",
         rule3v: "Main image is optional",
         rule4k: "Rule 4",
-        rule4v: "Dashboard opens after registration",
+        rule4v: "Pinned location is optional",
         ownerNamePh: "Owner name",
         phonePh: "Registered mobile number",
         passPh: "Create password",
         messNamePh: "Your mess name",
         locationPh: "Area, address or location details",
         pricePh: "e.g. ₹80 per thali / ₹3000 monthly",
-        coordsEmpty: "Latitude: Not captured yet<br>Longitude: Not captured yet",
+        coordsEmpty: "Latitude: Not pinned yet<br>Longitude: Not pinned yet",
         coordsOk: (lat, lon) => `Latitude: ${lat}<br>Longitude: ${lon}`,
-        gettingLocation: "Getting current location...",
-        locationOk: "Location captured successfully.",
-        locationFail: "Could not get location. Please allow permission.",
+        pinLoading: "Pinning location...",
+        pinOk: "Location pinned successfully.",
+        pinFail: "Could not get location. Please allow permission.",
+        pinCleared: "Pinned location cleared.",
         fillAll: "Please fill all required details.",
-        captureFirst: "Please capture current location first.",
         checking: "Checking existing mess...",
         numberExists: "Mess already exists with this number.",
         uploading: "Uploading image and saving mess...",
@@ -515,6 +538,14 @@
       const box = document.getElementById("statusText");
       box.innerText = message;
       box.className = isError ? "status error" : "status";
+    }
+
+    function updateCoordsBox(){
+      if (pinnedLat === null || pinnedLon === null) {
+        document.getElementById("coordsBox").innerHTML = t().coordsEmpty;
+      } else {
+        document.getElementById("coordsBox").innerHTML = t().coordsOk(pinnedLat, pinnedLon);
+      }
     }
 
     function setLanguage(lang){
@@ -534,8 +565,10 @@
       document.getElementById("priceLabel").innerText = t().priceLabel;
       document.getElementById("imageLabel").innerText = t().imageLabel;
       document.getElementById("imageHelper").innerText = t().imageHelper;
-      document.getElementById("locationCaptureLabel").innerText = t().locationCaptureLabel;
-      document.getElementById("captureBtn").innerText = t().captureBtn;
+      document.getElementById("pinLabel").innerText = t().pinLabel;
+      document.getElementById("pinBtn").innerText = t().pinBtn;
+      document.getElementById("clearPinBtn").innerText = t().clearPinBtn;
+      document.getElementById("pinHelper").innerText = t().pinHelper;
       document.getElementById("submitBtn").innerText = t().submitBtn;
       document.getElementById("sideTitle").innerText = t().sideTitle;
       document.getElementById("sideSub").innerText = t().sideSub;
@@ -555,36 +588,39 @@
       document.getElementById("location").placeholder = t().locationPh;
       document.getElementById("price").placeholder = t().pricePh;
 
-      if (currentLat === null || currentLon === null) {
-        document.getElementById("coordsBox").innerHTML = t().coordsEmpty;
-      } else {
-        document.getElementById("coordsBox").innerHTML = t().coordsOk(currentLat, currentLon);
-      }
-
       document.getElementById("mrBtn").classList.toggle("active", lang === "mr");
       document.getElementById("enBtn").classList.toggle("active", lang === "en");
+
+      updateCoordsBox();
     }
 
-    function captureLocation(){
+    function pinCurrentLocation(){
       if (!navigator.geolocation) {
-        setStatus(t().locationFail, true);
+        setStatus(t().pinFail, true);
         return;
       }
 
-      setStatus(t().gettingLocation);
+      setStatus(t().pinLoading);
 
       navigator.geolocation.getCurrentPosition(
         function(position){
-          currentLat = position.coords.latitude;
-          currentLon = position.coords.longitude;
-          document.getElementById("coordsBox").innerHTML = t().coordsOk(currentLat, currentLon);
-          setStatus(t().locationOk);
+          pinnedLat = position.coords.latitude;
+          pinnedLon = position.coords.longitude;
+          updateCoordsBox();
+          setStatus(t().pinOk);
         },
         function(){
-          setStatus(t().locationFail, true);
+          setStatus(t().pinFail, true);
         },
         { enableHighAccuracy:true, timeout:15000, maximumAge:0 }
       );
+    }
+
+    function clearPinnedLocation(){
+      pinnedLat = null;
+      pinnedLon = null;
+      updateCoordsBox();
+      setStatus(t().pinCleared);
     }
 
     async function uploadMainImage(file){
@@ -607,62 +643,82 @@
       const location = document.getElementById("location").value.trim();
       const price = document.getElementById("price").value.trim();
       const mainImageFile = document.getElementById("mainImage").files[0];
-  const status = document.getElementById("registerStatus");
 
-  if (!ownerName || !contact || !password || !messName || !location || !price) {
-    status.className = "status error";
-    status.innerText = currentLang === "mr"
-      ? "कृपया सगळी माहिती भरा."
-      : "Please fill all details.";
-    return;
-  }
+      if (!ownerName || !contact || !password || !messName || !location || !price) {
+        setStatus(t().fillAll, true);
+        return;
+      }
 
-  status.className = "status";
-  status.innerText = currentLang === "mr"
-    ? "नोंदणी सुरू आहे..."
-    : "Registering...";
+      setStatus(t().checking);
 
-  let mainImageUrl = "";
-  if (mainImageFile) {
-    const upload = await uploadImage(mainImageFile, "main");
-    if (upload?.error) {
-      status.className = "status error";
-      status.innerText = currentLang === "mr"
-        ? "इमेज upload झाली नाही."
-        : "Image upload failed.";
-      return;
+      const { data: existing, error: checkError } = await sb
+        .from("mess")
+        .select("id")
+        .eq("contact", contact)
+        .limit(1);
+
+      if (checkError) {
+        setStatus(t().saveFail, true);
+        return;
+      }
+
+      if (existing && existing.length > 0) {
+        setStatus(t().numberExists, true);
+        return;
+      }
+
+      let mainImageUrl = null;
+
+      if (mainImageFile) {
+        setStatus(t().uploading);
+        mainImageUrl = await uploadMainImage(mainImageFile);
+
+        if (mainImageUrl && mainImageUrl.error) {
+          setStatus(t().uploadFail, true);
+          return;
+        }
+      } else {
+        setStatus(t().uploading);
+      }
+
+      const payload = {
+        owner_name: ownerName,
+        contact: contact,
+        password: password,
+        name: messName,
+        location: location,
+        price: price,
+        latitude: pinnedLat,
+        longitude: pinnedLon,
+        image_url: mainImageUrl || null
+      };
+
+      const { data, error } = await sb
+        .from("mess")
+        .insert([payload])
+        .select()
+        .limit(1);
+
+      if (error || !data || data.length === 0) {
+        console.log(error);
+        setStatus(t().saveFail, true);
+        return;
+      }
+
+      const saved = data[0];
+
+      localStorage.setItem("ownerPhone", contact);
+      localStorage.setItem("ownerMessId", saved.id);
+      localStorage.setItem("ownerMessName", messName);
+
+      setStatus(t().success);
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 700);
     }
-    mainImageUrl = upload;
-  }
 
-  const { data, error } = await sb.from("mess").insert([{
-    name: messName,
-    contact: contact,
-    password: password,
-    location: location,
-    price: price,
-    image_url: mainImageUrl,
-    owner_name: ownerName
-  }]).select();
-
-  if (error) {
-    status.className = "status error";
-    status.innerText = "Error: " + error.message;
-    return;
-  }
-
-  if (data && data.length) {
-    localStorage.setItem("ownerMessId", data[0].id);
-    localStorage.setItem("ownerMessName", data[0].name || "");
-    localStorage.setItem("ownerPhone", data[0].contact || "");
-
-    status.className = "status success";
-    status.innerText = currentLang === "mr"
-      ? "नोंदणी यशस्वी झाली."
-      : "Registration successful.";
-
-    setTimeout(() => {
-      window.location.href = "dashboard.html";
-    }, 1200);
-  }
-}
+    setLanguage(currentLang);
+  </script>
+</body>
+</html>
