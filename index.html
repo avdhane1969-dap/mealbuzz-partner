@@ -17,23 +17,18 @@
     }
 
     :root{
-      --bg:#0b0d12;
-      --card:rgba(17,21,29,0.78);
-      --line:rgba(255,255,255,0.10);
       --text:#f5f7fb;
-      --muted:#c8cfda;
+      --muted:#d6dce6;
       --accent:#ff8a00;
       --accent2:#ffb347;
-      --shadow:0 18px 44px rgba(0,0,0,0.34);
+      --shadow:0 18px 44px rgba(0,0,0,0.30);
     }
 
     body{
       font-family:'Inter', Arial, sans-serif;
       min-height:100vh;
       color:var(--text);
-      background:
-        radial-gradient(circle at top right, rgba(255,138,0,0.10), transparent 22%),
-        linear-gradient(180deg,#0b0d12 0%, #141925 100%);
+      background:#0b0d12;
       overflow-x:hidden;
     }
 
@@ -52,33 +47,36 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:22px 16px;
+      padding:20px 16px;
     }
 
     .bg{
       position:absolute;
       inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.62) 55%, rgba(0,0,0,0.84) 100%),
-        radial-gradient(circle at top right, rgba(255,138,0,0.18), transparent 28%),
-        url('mealbuzzpartner.jpg') center/cover no-repeat;
+      background:url("Mealbuzz partner.jpg") center/cover no-repeat;
       z-index:0;
+    }
+
+    .bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.32) 58%, rgba(0,0,0,0.46) 100%),
+        radial-gradient(circle at top right, rgba(255,138,0,0.16), transparent 24%);
     }
 
     .shell{
       position:relative;
       z-index:1;
-      width:min(1120px, 100%);
+      width:min(1140px, 100%);
       display:grid;
-      gap:20px;
+      gap:18px;
     }
 
     .top-actions{
-      position:relative;
-      z-index:2;
       display:flex;
       justify-content:flex-end;
-      margin-bottom:-6px;
     }
 
     .lang-switch{
@@ -86,8 +84,8 @@
       gap:6px;
       padding:6px;
       border-radius:16px;
-      background:rgba(17,21,29,0.70);
-      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(10,12,18,0.36);
+      border:1px solid rgba(255,255,255,0.14);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
       box-shadow:var(--shadow);
@@ -109,14 +107,19 @@
       color:#fff;
     }
 
+    .content-grid{
+      display:grid;
+      gap:18px;
+    }
+
     .hero-card,
     .login-card{
-      background:var(--card);
-      border:1px solid var(--line);
+      background:rgba(10,12,18,0.34);
+      border:1px solid rgba(255,255,255,0.14);
       border-radius:28px;
       box-shadow:var(--shadow);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
       overflow:hidden;
       position:relative;
     }
@@ -137,7 +140,7 @@
     }
 
     .hero-card{
-      padding:22px 18px 20px;
+      padding:24px 20px;
     }
 
     .brand{
@@ -146,7 +149,7 @@
 
     .brand h1{
       font-family:'Poppins', sans-serif;
-      font-size:30px;
+      font-size:32px;
       line-height:1;
       background:linear-gradient(90deg,#ffffff 0%, #ffdcb3 35%, #ffb347 62%, #ff8a00 100%);
       -webkit-background-clip:text;
@@ -155,7 +158,7 @@
     }
 
     .brand p{
-      color:#dde4ef;
+      color:#e8edf5;
       font-size:11px;
       margin-top:6px;
       letter-spacing:1.8px;
@@ -174,9 +177,10 @@
 
     .hero-title{
       font-family:'Poppins', sans-serif;
-      font-size:clamp(28px, 8vw, 48px);
-      line-height:1.12;
-      margin-bottom:12px;
+      font-size:clamp(30px, 8vw, 54px);
+      line-height:1.1;
+      margin-bottom:14px;
+      max-width:640px;
     }
 
     .hero-title .accent{
@@ -184,33 +188,35 @@
     }
 
     .hero-subtitle{
-      color:#eef3fb;
-      font-size:16px;
+      color:#f2f6fc;
+      font-size:17px;
       line-height:1.8;
       margin-bottom:10px;
-      max-width:700px;
+      max-width:720px;
+      font-weight:600;
     }
 
     .hero-english{
-      color:#bfc8d6;
+      color:#d5dce8;
       font-size:14px;
       line-height:1.8;
-      max-width:720px;
+      max-width:760px;
     }
 
     .mini-points{
       display:grid;
-      gap:10px;
-      margin-top:22px;
+      gap:12px;
+      margin-top:24px;
+      max-width:760px;
     }
 
     .mini-point{
       display:flex;
       gap:10px;
       align-items:flex-start;
-      color:#e8edf5;
+      color:#eef3fb;
       font-size:14px;
-      line-height:1.7;
+      line-height:1.75;
     }
 
     .mini-point span{
@@ -218,17 +224,18 @@
       height:10px;
       border-radius:50%;
       background:#ffb347;
-      margin-top:6px;
+      margin-top:7px;
       flex-shrink:0;
+      box-shadow:0 0 10px rgba(255,179,71,0.45);
     }
 
     .login-card{
-      padding:20px;
+      padding:22px;
     }
 
     .login-title{
       font-family:'Poppins', sans-serif;
-      font-size:28px;
+      font-size:30px;
       margin-bottom:8px;
     }
 
@@ -246,9 +253,9 @@
 
     .input{
       width:100%;
-      background:rgba(255,255,255,0.05);
+      background:rgba(255,255,255,0.10);
       color:#fff;
-      border:1px solid rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.16);
       border-radius:16px;
       padding:15px 16px;
       outline:none;
@@ -257,7 +264,12 @@
     }
 
     .input::placeholder{
-      color:rgba(255,255,255,0.58);
+      color:rgba(255,255,255,0.72);
+    }
+
+    .input:focus{
+      border-color:rgba(255,179,71,0.6);
+      box-shadow:0 0 0 3px rgba(255,138,0,0.10);
     }
 
     .login-btn,
@@ -279,46 +291,42 @@
     }
 
     .register-btn{
-      background:rgba(255,255,255,0.05);
+      background:rgba(255,255,255,0.10);
       color:#fff;
-      border:1px solid rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.14);
     }
 
     .status{
       min-height:22px;
       font-size:14px;
-      color:#90ee90;
+      color:#9df0bc;
       margin-top:4px;
     }
 
     .status.error{
-      color:#ff9d9d;
+      color:#ffb2b2;
     }
 
     .bottom-note{
       margin-top:16px;
-      color:#b5becb;
+      color:#d8dfe9;
       font-size:13px;
       line-height:1.7;
       text-align:center;
     }
 
     .footer{
-      margin-top:8px;
+      margin-top:10px;
       text-align:center;
-      color:#aeb7c4;
+      color:#d2d9e4;
       font-size:12px;
       line-height:1.7;
     }
 
     @media (min-width:900px){
-      .shell{
-        grid-template-columns:1.15fr 0.85fr;
-        align-items:center;
-      }
-
-      .top-actions{
-        grid-column:1 / -1;
+      .content-grid{
+        grid-template-columns:1.14fr 0.86fr;
+        align-items:stretch;
       }
 
       .hero-card{
@@ -328,7 +336,7 @@
       }
 
       .hero-inner{
-        padding:10px 8px;
+        padding:8px 6px;
       }
 
       .login-card{
@@ -356,87 +364,89 @@
         </div>
       </div>
 
-      <section class="hero-card">
-        <div class="hero-inner">
-          <div class="brand">
-            <h1>Meal Buzz Partner</h1>
-            <p id="brandSub">Owner Portal</p>
-          </div>
-
-          <div class="eyebrow" id="eyebrow">Partner growth platform</div>
-
-          <h2 class="hero-title" id="heroTitle">
-            <span class="accent">चव तुमची,</span><br>
-            पोहोच आमची
-          </h2>
-
-          <p class="hero-subtitle" id="heroSubtitle">
-            तुमच्या मेसला द्या नव्या ग्राहकांची वाट
-          </p>
-
-          <p class="hero-english" id="heroEnglish">
-            Your Taste, Our Reach — Open new paths for your mess to reach customers.
-          </p>
-
-          <div class="mini-points">
-            <div class="mini-point">
-              <span></span>
-              <div id="point1">रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा</div>
+      <div class="content-grid">
+        <section class="hero-card">
+          <div class="hero-inner">
+            <div class="brand">
+              <h1>Meal Buzz Partner</h1>
+              <p id="brandSub">Owner Portal</p>
             </div>
 
-            <div class="mini-point">
-              <span></span>
-              <div id="point2">तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा</div>
+            <div class="eyebrow" id="eyebrow">Partner Growth Platform</div>
+
+            <h2 class="hero-title" id="heroTitle">
+              <span class="accent">चव तुमची,</span><br>
+              पोहोच आमची
+            </h2>
+
+            <p class="hero-subtitle" id="heroSubtitle">
+              तुमच्या मेसला द्या नव्या ग्राहकांची वाट
+            </p>
+
+            <p class="hero-english" id="heroEnglish">
+              Your Taste, Our Reach — Open new paths for your mess to reach customers.
+            </p>
+
+            <div class="mini-points">
+              <div class="mini-point">
+                <span></span>
+                <div id="point1">रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा</div>
+              </div>
+
+              <div class="mini-point">
+                <span></span>
+                <div id="point2">तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा</div>
+              </div>
+
+              <div class="mini-point">
+                <span></span>
+                <div id="point3">तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="login-card">
+          <div class="login-inner">
+            <h3 class="login-title" id="loginTitle">Owner Login</h3>
+            <p class="login-subtitle" id="loginSubtitle">
+              तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.
+            </p>
+
+            <div class="form">
+              <input
+                type="text"
+                id="ownerPhone"
+                class="input"
+                placeholder="नोंदणीकृत मोबाइल नंबर"
+              />
+
+              <input
+                type="password"
+                id="ownerPassword"
+                class="input"
+                placeholder="पासवर्ड"
+              />
+
+              <button class="login-btn" id="loginBtn" onclick="ownerLogin()">Login</button>
+
+              <a href="register.html">
+                <button class="register-btn" id="registerBtn" type="button">New Partner? Register Your Mess</button>
+              </a>
+
+              <div class="status" id="loginStatus"></div>
             </div>
 
-            <div class="mini-point">
-              <span></span>
-              <div id="point3">तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल</div>
+            <div class="bottom-note" id="bottomNote">
+              एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.
+            </div>
+
+            <div class="footer">
+              © 2026 Meal Buzz Partner
             </div>
           </div>
-        </div>
-      </section>
-
-      <section class="login-card">
-        <div class="login-inner">
-          <h3 class="login-title" id="loginTitle">Owner Login</h3>
-          <p class="login-subtitle" id="loginSubtitle">
-            तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.
-          </p>
-
-          <div class="form">
-            <input
-              type="text"
-              id="ownerPhone"
-              class="input"
-              placeholder="नोंदणीकृत मोबाइल नंबर"
-            />
-
-            <input
-              type="password"
-              id="ownerPassword"
-              class="input"
-              placeholder="पासवर्ड"
-            />
-
-            <button class="login-btn" id="loginBtn" onclick="ownerLogin()">Login</button>
-
-            <a href="register.html">
-              <button class="register-btn" id="registerBtn" type="button">New Partner? Register Your Mess</button>
-            </a>
-
-            <div class="status" id="loginStatus"></div>
-          </div>
-
-          <div class="bottom-note" id="bottomNote">
-            एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.
-          </div>
-
-          <div class="footer" id="footerText">
-            © 2026 Meal Buzz Partner
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -450,7 +460,7 @@
       mr: {
         htmlLang: "mr",
         brandSub: "Owner Portal",
-        eyebrow: "Partner growth platform",
+        eyebrow: "Partner Growth Platform",
         heroTitle: `<span class="accent">चव तुमची,</span><br>पोहोच आमची`,
         heroSubtitle: "तुमच्या मेसला द्या नव्या ग्राहकांची वाट",
         heroEnglish: "Your Taste, Our Reach — Open new paths for your mess to reach customers.",
@@ -473,12 +483,12 @@
       en: {
         htmlLang: "en",
         brandSub: "Owner Portal",
-        eyebrow: "Partner growth platform",
+        eyebrow: "Partner Growth Platform",
         heroTitle: `Your <span class="accent">Taste,</span><br>Our Reach`,
         heroSubtitle: "Open new paths for your mess to reach customers",
         heroEnglish: "Helping your mess reach more nearby customers with simple daily updates.",
         point1: "Update your daily menu and reach more nearby customers",
-        point2: "Manage your mess details, menus and images in one place",
+        point2: "Manage your mess details, menu and photos in one place",
         point3: "A simple partner portal to improve your local visibility",
         loginTitle: "Owner Login",
         loginSubtitle: "Login with your registered mobile number and password.",
