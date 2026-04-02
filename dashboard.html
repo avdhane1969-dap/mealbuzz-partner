@@ -8,12 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-
     :root{
       --text:#f5f7fb;
       --muted:#cfd6e2;
@@ -24,7 +22,6 @@
       --ok:#8df0b5;
       --danger:#ffb3b3;
     }
-
     body{
       font-family:'Inter',sans-serif;
       color:var(--text);
@@ -33,16 +30,8 @@
         radial-gradient(circle at top right, rgba(255,152,0,0.10), transparent 22%),
         linear-gradient(180deg,#0b0d12 0%, #131924 100%);
     }
-
-    button,input,textarea{
-      font-family:inherit;
-    }
-
-    a{
-      text-decoration:none;
-      color:inherit;
-    }
-
+    button,input,textarea{font-family:inherit}
+    a{text-decoration:none;color:inherit}
     .page{
       width:min(1180px,100%);
       margin:0 auto;
@@ -50,7 +39,6 @@
       display:grid;
       gap:18px;
     }
-
     .topbar{
       display:flex;
       justify-content:space-between;
@@ -58,7 +46,6 @@
       gap:12px;
       flex-wrap:wrap;
     }
-
     .brand h1{
       font-family:'Poppins',sans-serif;
       font-size:34px;
@@ -68,7 +55,6 @@
       -webkit-text-fill-color:transparent;
       background-clip:text;
     }
-
     .brand p{
       margin-top:6px;
       font-size:12px;
@@ -77,14 +63,12 @@
       color:#e9eef6;
       text-transform:uppercase;
     }
-
     .top-actions{
       display:flex;
       gap:10px;
       align-items:center;
       flex-wrap:wrap;
     }
-
     .lang-switch{
       display:inline-flex;
       gap:6px;
@@ -93,26 +77,22 @@
       background:rgba(255,255,255,0.04);
       border:1px solid var(--line);
     }
-
     .lang-btn,.ghost-btn,.submit-btn{
       border:none;
       cursor:pointer;
       border-radius:14px;
       font-weight:800;
     }
-
     .lang-btn{
       background:transparent;
       color:#fff;
       padding:10px 14px;
       font-size:13px;
     }
-
     .lang-btn.active{
       background:linear-gradient(90deg,var(--accent),var(--accent2));
       color:#fff;
     }
-
     .ghost-btn{
       padding:12px 16px;
       font-size:14px;
@@ -120,12 +100,7 @@
       color:#fff;
       border:1px solid var(--line);
     }
-
-    .grid{
-      display:grid;
-      gap:18px;
-    }
-
+    .grid{display:grid;gap:18px}
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -135,30 +110,19 @@
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
     }
-
     .section-title{
       font-family:'Poppins',sans-serif;
       font-size:24px;
       margin-bottom:8px;
     }
-
     .section-sub{
       color:var(--muted);
       font-size:14px;
       line-height:1.7;
       margin-bottom:16px;
     }
-
-    .form-grid{
-      display:grid;
-      gap:14px;
-    }
-
-    .field-group{
-      display:grid;
-      gap:8px;
-    }
-
+    .form-grid{display:grid;gap:14px}
+    .field-group{display:grid;gap:8px}
     .label{
       font-size:12px;
       font-weight:800;
@@ -166,7 +130,6 @@
       text-transform:uppercase;
       color:#ffcc80;
     }
-
     .input,.textarea,.file-input{
       width:100%;
       padding:14px 15px;
@@ -177,35 +140,27 @@
       font-size:14px;
       outline:none;
     }
-
     .textarea{
       min-height:100px;
       resize:vertical;
       line-height:1.7;
     }
-
-    .input::placeholder,.textarea::placeholder{
-      color:rgba(255,255,255,0.60);
-    }
-
+    .input::placeholder,.textarea::placeholder{color:rgba(255,255,255,0.60)}
     .input:focus,.textarea:focus{
       border-color:rgba(255,179,71,0.60);
       box-shadow:0 0 0 3px rgba(255,152,0,0.08);
     }
-
     .helper{
       color:var(--muted);
       font-size:12px;
       line-height:1.6;
     }
-
     .map-note{
       color:#dce3ee;
       font-size:13px;
       line-height:1.7;
       margin-bottom:10px;
     }
-
     #map{
       width:100%;
       height:320px;
@@ -213,7 +168,6 @@
       overflow:hidden;
       border:1px solid rgba(255,255,255,0.10);
     }
-
     .coord-box{
       background:rgba(255,255,255,0.04);
       border:1px solid rgba(255,255,255,0.08);
@@ -223,7 +177,6 @@
       font-size:14px;
       line-height:1.7;
     }
-
     .submit-btn{
       padding:15px 18px;
       font-size:15px;
@@ -232,31 +185,28 @@
       width:100%;
       box-shadow:0 12px 28px rgba(255,152,0,0.22);
     }
-
+    .submit-btn:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+    }
     .status{
       min-height:22px;
       font-size:14px;
       color:var(--ok);
       margin-top:6px;
     }
-
-    .status.error{
-      color:var(--danger);
-    }
-
+    .status.error{color:var(--danger)}
     .info-grid{
       display:grid;
       gap:12px;
       margin-top:12px;
     }
-
     .info-box{
       background:rgba(255,255,255,0.04);
       border:1px solid rgba(255,255,255,0.08);
       border-radius:18px;
       padding:14px;
     }
-
     .info-box .k{
       color:#ffcc80;
       font-size:12px;
@@ -265,30 +215,19 @@
       font-weight:800;
       margin-bottom:6px;
     }
-
     .info-box .v{
       color:#edf2f8;
       line-height:1.7;
       font-size:14px;
     }
-
     @media(min-width:920px){
       .grid{
         grid-template-columns:1.05fr 0.95fr;
         align-items:start;
       }
-
-      .form-grid{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .full{
-        grid-column:1 / -1;
-      }
-
-      .info-grid{
-        grid-template-columns:1fr 1fr;
-      }
+      .form-grid{grid-template-columns:1fr 1fr}
+      .full{grid-column:1 / -1}
+      .info-grid{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
@@ -302,10 +241,10 @@
 
       <div class="top-actions">
         <div class="lang-switch">
-          <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
-          <button class="lang-btn" id="enBtn" onclick="setLanguage('en')">English</button>
+          <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')" type="button">मराठी</button>
+          <button class="lang-btn" id="enBtn" onclick="setLanguage('en')" type="button">English</button>
         </div>
-        <a href="index.html"><button class="ghost-btn" id="backBtn">Back</button></a>
+        <a href="index.html"><button class="ghost-btn" id="backBtn" type="button">Back</button></a>
       </div>
     </div>
 
@@ -324,7 +263,7 @@
 
           <div class="field-group">
             <div class="label" id="phoneLabel">Mobile Number</div>
-            <input type="text" id="contact" class="input" placeholder="नोंदणीकृत मोबाइल नंबर">
+            <input type="text" id="contact" class="input" placeholder="नोंदणीकृत मोबाइल नंबर" maxlength="15">
           </div>
 
           <div class="field-group">
@@ -408,7 +347,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://iinvhwsbnvmcujyrzlxe.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_fwhxfVqWpDrro8hkQbQQRA_1crMexZv";
+    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentLang = localStorage.getItem("partnerLang") || "mr";
@@ -454,11 +393,15 @@
         coordsOk: (lat, lon) => `Latitude: ${lat}<br>Longitude: ${lon}`,
         fillAll: "कृपया सगळी आवश्यक माहिती भरा.",
         pickLocation: "कृपया map वर mess location निवडा.",
+        invalidPhone: "कृपया valid mobile number भरा.",
+        weakPass: "पासवर्ड किमान 6 अक्षरांचा ठेवा.",
         checking: "Checking existing mess...",
         numberExists: "Mess already exists with this number.",
+        accountCreate: "Partner account तयार होत आहे...",
         uploading: "Uploading image and saving mess...",
         uploadFail: "Image upload failed.",
         saveFail: "Mess save करताना अडचण आली.",
+        authFail: "Account तयार करताना अडचण आली.",
         success: "Mess registered successfully 🎉"
       },
       en: {
@@ -497,11 +440,15 @@
         coordsOk: (lat, lon) => `Latitude: ${lat}<br>Longitude: ${lon}`,
         fillAll: "Please fill all required details.",
         pickLocation: "Please select mess location on the map.",
+        invalidPhone: "Please enter a valid mobile number.",
+        weakPass: "Password must be at least 6 characters.",
         checking: "Checking existing mess...",
         numberExists: "Mess already exists with this number.",
+        accountCreate: "Creating partner account...",
         uploading: "Uploading image and saving mess...",
         uploadFail: "Image upload failed.",
         saveFail: "There was a problem saving the mess.",
+        authFail: "There was a problem creating the account.",
         success: "Mess registered successfully 🎉"
       }
     };
@@ -514,11 +461,26 @@
       box.className = isError ? "status error" : "status";
     }
 
+    function setSubmitDisabled(disabled){
+      document.getElementById("submitBtn").disabled = disabled;
+    }
+
+    function normalizePhone(phone){
+      return phone.replace(/\D/g, "");
+    }
+
+    function buildPartnerEmail(phone){
+      return `${normalizePhone(phone)}@mealbuzz.partner`;
+    }
+
     function updateCoordsBox(){
       if (pickedLat === null || pickedLon === null) {
         document.getElementById("coordsBox").innerHTML = t().coordsEmpty;
       } else {
-        document.getElementById("coordsBox").innerHTML = t().coordsOk(pickedLat, pickedLon);
+        document.getElementById("coordsBox").innerHTML = t().coordsOk(
+          Number(pickedLat).toFixed(6),
+          Number(pickedLon).toFixed(6)
+        );
       }
     }
 
@@ -567,13 +529,13 @@
     }
 
     function initMap(){
-      map = L.map('map').setView([19.9975, 73.7898], 12);
+      map = L.map("map").setView([17.2857, 74.1818], 13);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors"
       }).addTo(map);
 
-      map.on('click', function(e){
+      map.on("click", function(e){
         pickedLat = e.latlng.lat;
         pickedLon = e.latlng.lng;
 
@@ -590,18 +552,31 @@
     async function uploadMainImage(file){
       if (!file) return null;
 
-      const fileName = `main-${Date.now()}-${file.name}`;
-      const { error: uploadError } = await sb.storage.from("mess-images").upload(fileName, file);
+      const cleanName = file.name.replace(/\s+/g, "-");
+      const fileName = `main-${Date.now()}-${cleanName}`;
 
-      if (uploadError) return { error: true };
+      const { error: uploadError } = await sb
+        .storage
+        .from("mess-images")
+        .upload(fileName, file, { cacheControl: "3600", upsert: false });
 
-      const { data: publicData } = sb.storage.from("mess-images").getPublicUrl(fileName);
-      return publicData.publicUrl;
+      if (uploadError) {
+        console.log("Upload error:", uploadError);
+        return { error: true, message: uploadError.message };
+      }
+
+      const { data: publicData } = sb
+        .storage
+        .from("mess-images")
+        .getPublicUrl(fileName);
+
+      return publicData?.publicUrl || null;
     }
 
     async function registerMess(){
       const ownerName = document.getElementById("ownerName").value.trim();
-      const contact = document.getElementById("contact").value.trim();
+      const rawContact = document.getElementById("contact").value.trim();
+      const contact = normalizePhone(rawContact);
       const password = document.getElementById("password").value.trim();
       const messName = document.getElementById("messName").value.trim();
       const location = document.getElementById("location").value.trim();
@@ -613,78 +588,124 @@
         return;
       }
 
+      if (contact.length < 10) {
+        setStatus(t().invalidPhone, true);
+        return;
+      }
+
+      if (password.length < 6) {
+        setStatus(t().weakPass, true);
+        return;
+      }
+
       if (pickedLat === null || pickedLon === null) {
         setStatus(t().pickLocation, true);
         return;
       }
 
-      setStatus(t().checking);
+      setSubmitDisabled(true);
 
-      const { data: existing, error: checkError } = await sb
-        .from("mess")
-        .select("id")
-        .eq("contact", contact)
-        .limit(1);
+      try {
+        setStatus(t().checking);
 
-      if (checkError) {
-        setStatus(t().saveFail, true);
-        return;
-      }
+        const { data: existing, error: checkError } = await sb
+          .from("mess")
+          .select("id")
+          .eq("contact", contact)
+          .limit(1);
 
-      if (existing && existing.length > 0) {
-        setStatus(t().numberExists, true);
-        return;
-      }
-
-      let mainImageUrl = null;
-
-      if (mainImageFile) {
-        setStatus(t().uploading);
-        mainImageUrl = await uploadMainImage(mainImageFile);
-
-        if (mainImageUrl && mainImageUrl.error) {
-          setStatus(t().uploadFail, true);
+        if (checkError) {
+          console.log("Check error:", checkError);
+          setStatus(t().saveFail, true);
+          setSubmitDisabled(false);
           return;
         }
-      } else {
+
+        if (existing && existing.length > 0) {
+          setStatus(t().numberExists, true);
+          setSubmitDisabled(false);
+          return;
+        }
+
+        setStatus(t().accountCreate);
+
+        const partnerEmail = buildPartnerEmail(contact);
+
+        const { data: authData, error: authError } = await sb.auth.signUp({
+          email: partnerEmail,
+          password: password,
+          options: {
+            data: {
+              owner_name: ownerName,
+              contact: contact,
+              mess_name: messName
+            }
+          }
+        });
+
+        if (authError || !authData?.user) {
+          console.log("Auth error:", authError);
+          setStatus(authError?.message || t().authFail, true);
+          setSubmitDisabled(false);
+          return;
+        }
+
         setStatus(t().uploading);
+
+        let mainImageUrl = null;
+        if (mainImageFile) {
+          const uploadResult = await uploadMainImage(mainImageFile);
+
+          if (uploadResult && uploadResult.error) {
+            setStatus(uploadResult.message || t().uploadFail, true);
+            setSubmitDisabled(false);
+            return;
+          }
+
+          mainImageUrl = uploadResult;
+        }
+
+        const payload = {
+          user_id: authData.user.id,
+          owner_name: ownerName,
+          contact: contact,
+          name: messName,
+          location: location,
+          price: price,
+          latitude: pickedLat,
+          longitude: pickedLon,
+          image_url: mainImageUrl || null
+        };
+
+        const { data: insertedData, error: insertError } = await sb
+          .from("mess")
+          .insert([payload])
+          .select()
+          .single();
+
+        if (insertError || !insertedData) {
+          console.log("Insert error:", insertError);
+          setStatus(insertError?.message || t().saveFail, true);
+          setSubmitDisabled(false);
+          return;
+        }
+
+        localStorage.setItem("ownerPhone", contact);
+        localStorage.setItem("ownerMessId", insertedData.id);
+        localStorage.setItem("ownerMessName", messName);
+        localStorage.setItem("ownerUserId", authData.user.id);
+
+        setStatus(t().success);
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 900);
+
+      } catch (err) {
+        console.log("Unexpected error:", err);
+        setStatus(err.message || t().saveFail, true);
+        setSubmitDisabled(false);
       }
-
-      const payload = {
-        owner_name: ownerName,
-        contact: contact,
-        password: password,
-        name: messName,
-        location: location,
-        price: price,
-        latitude: pickedLat,
-        longitude: pickedLon,
-        image_url: mainImageUrl || null
-      };
-
-      const { data, error } = await sb
-        .from("mess")
-        .insert([payload])
-        .select()
-        .limit(1);
-
-      if (error || !data || data.length === 0) {
-        console.log(error);
-        setStatus(t().saveFail, true);
-        return;
-      }
-
-      const saved = data[0];
-
-      localStorage.setItem("ownerPhone", contact);
-      localStorage.setItem("ownerMessId", saved.id);
-      localStorage.setItem("ownerMessName", messName);
-
-      setStatus(t().success);
-
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 700);
     }
 
     setLanguage(currentLang);
