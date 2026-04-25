@@ -1,586 +1,313 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meal Buzz Partner</title>
-  <link rel="icon" href="favicon.png" type="image/png" />
+  <title>Meal Buzz Partner Login</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
 
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    :root{
-      --bg:#0b0d12;
-      --card:rgba(17,21,29,0.78);
-      --line:rgba(255,255,255,0.10);
-      --text:#f5f7fb;
-      --muted:#c8cfda;
-      --accent:#ff8a00;
-      --accent2:#ffb347;
-      --shadow:0 18px 44px rgba(0,0,0,0.34);
+    :root {
+      --text: #f5f7fb;
+      --muted: #cfd6e2;
+      --accent: #ff9800;
+      --accent2: #ffbf66;
+      --card: rgba(12, 15, 22, 0.86);
+      --line: rgba(255, 255, 255, 0.12);
+      --danger: #ffb3b3;
+      --ok: #8df0b5;
     }
 
-    body{
-      font-family:'Inter', Arial, sans-serif;
-      min-height:100vh;
-      color:var(--text);
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
       background:
-        radial-gradient(circle at top right, rgba(255,138,0,0.10), transparent 22%),
-        linear-gradient(180deg,#0b0d12 0%, #141925 100%);
-      overflow-x:hidden;
+        radial-gradient(circle at top right, rgba(255, 152, 0, 0.14), transparent 25%),
+        linear-gradient(180deg, #0b0d12 0%, #131924 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
-    a{
-      text-decoration:none;
-      color:inherit;
+    button, input {
+      font-family: inherit;
     }
 
-    button{
-      font-family:inherit;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .page{
-      position:relative;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:22px 16px;
+    .login-card {
+      width: min(460px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
-    .bg{
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.62) 55%, rgba(0,0,0,0.84) 100%),
-        radial-gradient(circle at top right, rgba(255,138,0,0.18), transparent 28%),
-        url('mealbuzzpartner.jpg') center/cover no-repeat;
-      z-index:0;
+    .brand {
+      margin-bottom: 24px;
+      text-align: center;
     }
 
-    .shell{
-      position:relative;
-      z-index:1;
-      width:min(1120px, 100%);
-      display:grid;
-      gap:20px;
+    .brand h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 36px;
+      line-height: 1;
+      background: linear-gradient(90deg, #ffffff 0%, #fff4e8 30%, #ffd699 58%, #ffb347 76%, #ff9800 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
     }
 
-    .top-actions{
-      position:relative;
-      z-index:2;
-      display:flex;
-      justify-content:flex-end;
-      margin-bottom:-6px;
+    .brand p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    .lang-switch{
-      display:inline-flex;
-      gap:6px;
-      padding:6px;
-      border-radius:16px;
-      background:rgba(17,21,29,0.70);
-      border:1px solid rgba(255,255,255,0.10);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      box-shadow:var(--shadow);
+    .field-group {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 15px;
     }
 
-    .lang-btn{
-      border:none;
-      background:transparent;
-      color:#fff;
-      padding:10px 14px;
-      border-radius:12px;
-      font-size:13px;
-      font-weight:800;
-      cursor:pointer;
+    .label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #ffcc80;
     }
 
-    .lang-btn.active{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#fff;
+    .input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      font-size: 15px;
+      outline: none;
     }
 
-    .hero-card,
-    .login-card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:28px;
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      overflow:hidden;
-      position:relative;
+    .input::placeholder {
+      color: rgba(255, 255, 255, 0.55);
     }
 
-    .hero-card::before,
-    .login-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-      pointer-events:none;
+    .input:focus {
+      border-color: rgba(255, 179, 71, 0.65);
+      box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.08);
     }
 
-    .hero-inner,
-    .login-inner{
-      position:relative;
-      z-index:1;
+    .login-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(255, 152, 0, 0.24);
+      margin-top: 6px;
     }
 
-    .hero-card{
-      padding:22px 18px 20px;
+    .login-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
 
-    .brand{
-      margin-bottom:22px;
+    .status {
+      min-height: 22px;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--ok);
+      text-align: center;
+      line-height: 1.5;
     }
 
-    .brand h1{
-      font-family:'Poppins', sans-serif;
-      font-size:30px;
-      line-height:1;
-      background:linear-gradient(90deg,#ffffff 0%, #ffdcb3 35%, #ffb347 62%, #ff8a00 100%);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
+    .status.error {
+      color: var(--danger);
     }
 
-    .brand p{
-      color:#dde4ef;
-      font-size:11px;
-      margin-top:6px;
-      letter-spacing:1.8px;
-      text-transform:uppercase;
-      font-weight:700;
+    .bottom-text {
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
     }
 
-    .eyebrow{
-      color:#ffbe63;
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      margin-bottom:10px;
+    .bottom-text a {
+      color: #ffcc80;
+      font-weight: 800;
     }
 
-    .hero-title{
-      font-family:'Poppins', sans-serif;
-      font-size:clamp(28px, 8vw, 48px);
-      line-height:1.12;
-      margin-bottom:12px;
-    }
-
-    .hero-title .accent{
-      color:#ffbe63;
-    }
-
-    .hero-subtitle{
-      color:#eef3fb;
-      font-size:16px;
-      line-height:1.8;
-      margin-bottom:10px;
-      max-width:700px;
-    }
-
-    .hero-english{
-      color:#bfc8d6;
-      font-size:14px;
-      line-height:1.8;
-      max-width:720px;
-    }
-
-    .mini-points{
-      display:grid;
-      gap:10px;
-      margin-top:22px;
-    }
-
-    .mini-point{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      color:#e8edf5;
-      font-size:14px;
-      line-height:1.7;
-    }
-
-    .mini-point span{
-      width:10px;
-      height:10px;
-      border-radius:50%;
-      background:#ffb347;
-      margin-top:6px;
-      flex-shrink:0;
-    }
-
-    .login-card{
-      padding:20px;
-    }
-
-    .login-title{
-      font-family:'Poppins', sans-serif;
-      font-size:28px;
-      margin-bottom:8px;
-    }
-
-    .login-subtitle{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.7;
-      margin-bottom:18px;
-    }
-
-    .form{
-      display:grid;
-      gap:12px;
-    }
-
-    .input{
-      width:100%;
-      background:rgba(255,255,255,0.05);
-      color:#fff;
-      border:1px solid rgba(255,255,255,0.10);
-      border-radius:16px;
-      padding:15px 16px;
-      outline:none;
-      font-size:15px;
-      font-family:inherit;
-    }
-
-    .input::placeholder{
-      color:rgba(255,255,255,0.58);
-    }
-
-    .login-btn,
-    .register-btn{
-      width:100%;
-      padding:15px 16px;
-      border:none;
-      border-radius:16px;
-      font-size:15px;
-      font-weight:800;
-      cursor:pointer;
-      font-family:inherit;
-    }
-
-    .login-btn{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#fff;
-      box-shadow:0 14px 28px rgba(255,138,0,0.20);
-    }
-
-    .register-btn{
-      background:rgba(255,255,255,0.05);
-      color:#fff;
-      border:1px solid rgba(255,255,255,0.10);
-    }
-
-    .status{
-      min-height:22px;
-      font-size:14px;
-      color:#90ee90;
-      margin-top:4px;
-    }
-
-    .status.error{
-      color:#ff9d9d;
-    }
-
-    .bottom-note{
-      margin-top:16px;
-      color:#b5becb;
-      font-size:13px;
-      line-height:1.7;
-      text-align:center;
-    }
-
-    .footer{
-      margin-top:8px;
-      text-align:center;
-      color:#aeb7c4;
-      font-size:12px;
-      line-height:1.7;
-    }
-
-    @media (min-width:900px){
-      .shell{
-        grid-template-columns:1.15fr 0.85fr;
-        align-items:center;
-      }
-
-      .top-actions{
-        grid-column:1 / -1;
-      }
-
-      .hero-card{
-        min-height:640px;
-        display:flex;
-        align-items:center;
-      }
-
-      .hero-inner{
-        padding:10px 8px;
-      }
-
-      .login-card{
-        min-height:560px;
-        display:flex;
-        align-items:center;
-      }
-
-      .login-inner{
-        width:100%;
-      }
+    .small-note {
+      margin-top: 14px;
+      color: rgba(255,255,255,0.58);
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
     }
   </style>
 </head>
+
 <body>
+  <div class="login-card">
+    <div class="brand">
+      <h1>Meal Buzz Partner</h1>
+      <p>Login to manage your mess details and daily menu.</p>
+    </div>
 
-  <div class="page">
-    <div class="bg"></div>
+    <div class="field-group">
+      <div class="label">Mobile Number</div>
+      <input
+        type="text"
+        id="loginContact"
+        class="input"
+        placeholder="Enter registered mobile number"
+        maxlength="15"
+      />
+    </div>
 
-    <div class="shell">
-      <div class="top-actions">
-        <div class="lang-switch">
-          <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
-          <button class="lang-btn" id="enBtn" onclick="setLanguage('en')">English</button>
-        </div>
-      </div>
+    <div class="field-group">
+      <div class="label">Password</div>
+      <input
+        type="password"
+        id="loginPassword"
+        class="input"
+        placeholder="Enter password"
+      />
+    </div>
 
-      <section class="hero-card">
-        <div class="hero-inner">
-          <div class="brand">
-            <h1>Meal Buzz Partner</h1>
-            <p id="brandSub">Owner Portal</p>
-          </div>
+    <button class="login-btn" id="loginBtn" onclick="loginPartner()" type="button">
+      Login
+    </button>
 
-          <div class="eyebrow" id="eyebrow">Partner growth platform</div>
+    <div class="status" id="loginStatus"></div>
 
-          <h2 class="hero-title" id="heroTitle">
-            <span class="accent">चव तुमची,</span><br>
-            पोहोच आमची
-          </h2>
+    <div class="bottom-text">
+      New partner?
+      <a href="register.html">Register your mess</a>
+    </div>
 
-          <p class="hero-subtitle" id="heroSubtitle">
-            तुमच्या मेसला द्या नव्या ग्राहकांची वाट
-          </p>
-
-          <p class="hero-english" id="heroEnglish">
-            Your Taste, Our Reach — Open new paths for your mess to reach customers.
-          </p>
-
-          <div class="mini-points">
-            <div class="mini-point">
-              <span></span>
-              <div id="point1">रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा</div>
-            </div>
-
-            <div class="mini-point">
-              <span></span>
-              <div id="point2">तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा</div>
-            </div>
-
-            <div class="mini-point">
-              <span></span>
-              <div id="point3">तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="login-card">
-        <div class="login-inner">
-          <h3 class="login-title" id="loginTitle">Owner Login</h3>
-          <p class="login-subtitle" id="loginSubtitle">
-            तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.
-          </p>
-
-          <div class="form">
-            <input
-              type="text"
-              id="ownerPhone"
-              class="input"
-              placeholder="नोंदणीकृत मोबाइल नंबर"
-            />
-
-            <input
-              type="password"
-              id="ownerPassword"
-              class="input"
-              placeholder="पासवर्ड"
-            />
-
-            <button class="login-btn" id="loginBtn" onclick="ownerLogin()">Login</button>
-
-            <a href="register.html">
-              <button class="register-btn" id="registerBtn" type="button">New Partner? Register Your Mess</button>
-            </a>
-
-            <div class="status" id="loginStatus"></div>
-          </div>
-
-          <div class="bottom-note" id="bottomNote">
-            एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.
-          </div>
-
-          <div class="footer" id="footerText">
-            © 2026 Meal Buzz Partner
-          </div>
-        </div>
-      </section>
+    <div class="small-note">
+      Use the same mobile number and password that you used during registration.
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     const SUPABASE_URL = "https://iinvhwsbnvmcujyrzlxe.supabase.co";
     const SUPABASE_KEY = "sb_publishable_fwhxfVqWpDrro8hkQbQQRA_1crMexZv";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const translations = {
-      mr: {
-        htmlLang: "mr",
-        brandSub: "Owner Portal",
-        eyebrow: "Partner growth platform",
-        heroTitle: `<span class="accent">चव तुमची,</span><br>पोहोच आमची`,
-        heroSubtitle: "तुमच्या मेसला द्या नव्या ग्राहकांची वाट",
-        heroEnglish: "Your Taste, Our Reach — Open new paths for your mess to reach customers.",
-        point1: "रोजचा मेन्यू अपडेट करा आणि जवळच्या ग्राहकांपर्यंत पोहोचा",
-        point2: "तुमच्या मेसची माहिती, मेन्यू आणि फोटो एका ठिकाणी सांभाळा",
-        point3: "तुमच्या मेसला अधिक लोकांपर्यंत पोहोचवण्यासाठी सोपा पार्टनर पोर्टल",
-        loginTitle: "Owner Login",
-        loginSubtitle: "तुमच्या नोंदणीकृत नंबर आणि पासवर्डने लॉगिन करा.",
-        phonePlaceholder: "नोंदणीकृत मोबाइल नंबर",
-        passwordPlaceholder: "पासवर्ड",
-        loginBtn: "Login",
-        registerBtn: "New Partner? Register Your Mess",
-        bottomNote: "एकदा नोंदणी झाल्यावर याच नंबरने लॉगिन करा.",
-        fillFields: "कृपया मोबाइल नंबर आणि पासवर्ड भरा.",
-        loggingIn: "Logging in...",
-        loginError: "लॉगिन करताना अडचण आली.",
-        wrongCreds: "मोबाइल नंबर किंवा पासवर्ड चुकीचा आहे.",
-        success: "लॉगिन यशस्वी 🎉"
-      },
-      en: {
-        htmlLang: "en",
-        brandSub: "Owner Portal",
-        eyebrow: "Partner growth platform",
-        heroTitle: `Your <span class="accent">Taste,</span><br>Our Reach`,
-        heroSubtitle: "Open new paths for your mess to reach customers",
-        heroEnglish: "Helping your mess reach more nearby customers with simple daily updates.",
-        point1: "Update your daily menu and reach more nearby customers",
-        point2: "Manage your mess details, menus and images in one place",
-        point3: "A simple partner portal to improve your local visibility",
-        loginTitle: "Owner Login",
-        loginSubtitle: "Login with your registered mobile number and password.",
-        phonePlaceholder: "Registered mobile number",
-        passwordPlaceholder: "Password",
-        loginBtn: "Login",
-        registerBtn: "New Partner? Register Your Mess",
-        bottomNote: "Once registered, use the same number to login.",
-        fillFields: "Please enter mobile number and password.",
-        loggingIn: "Logging in...",
-        loginError: "There was a problem while logging in.",
-        wrongCreds: "Wrong mobile number or password.",
-        success: "Login successful 🎉"
-      }
-    };
+    function normalizePhone(phone) {
+      return phone.replace(/\D/g, "");
+    }
 
-    let currentLang = localStorage.getItem("partnerLang") || "mr";
+    function buildPartnerEmail(phone) {
+      return `${normalizePhone(phone)}@mealbuzz.partner`;
+    }
 
     function setLoginStatus(message, isError = false) {
-      const box = document.getElementById("loginStatus");
-      box.innerText = message;
-      box.className = isError ? "status error" : "status";
+      const status = document.getElementById("loginStatus");
+      status.innerText = message;
+      status.className = isError ? "status error" : "status";
     }
 
-    function setLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem("partnerLang", lang);
-
-      const t = translations[lang];
-
-      document.documentElement.lang = t.htmlLang;
-      document.getElementById("brandSub").innerText = t.brandSub;
-      document.getElementById("eyebrow").innerText = t.eyebrow;
-      document.getElementById("heroTitle").innerHTML = t.heroTitle;
-      document.getElementById("heroSubtitle").innerText = t.heroSubtitle;
-      document.getElementById("heroEnglish").innerText = t.heroEnglish;
-      document.getElementById("point1").innerText = t.point1;
-      document.getElementById("point2").innerText = t.point2;
-      document.getElementById("point3").innerText = t.point3;
-      document.getElementById("loginTitle").innerText = t.loginTitle;
-      document.getElementById("loginSubtitle").innerText = t.loginSubtitle;
-      document.getElementById("ownerPhone").placeholder = t.phonePlaceholder;
-      document.getElementById("ownerPassword").placeholder = t.passwordPlaceholder;
-      document.getElementById("loginBtn").innerText = t.loginBtn;
-      document.getElementById("registerBtn").innerText = t.registerBtn;
-      document.getElementById("bottomNote").innerText = t.bottomNote;
-
-      document.getElementById("mrBtn").classList.toggle("active", lang === "mr");
-      document.getElementById("enBtn").classList.toggle("active", lang === "en");
+    function setLoginDisabled(disabled) {
+      document.getElementById("loginBtn").disabled = disabled;
     }
 
-    const savedOwnerPhone = localStorage.getItem("ownerPhone");
-    if (savedOwnerPhone) {
-      document.getElementById("ownerPhone").value = savedOwnerPhone;
-    }
+    async function loginPartner() {
+      const contact = normalizePhone(document.getElementById("loginContact").value.trim());
+      const password = document.getElementById("loginPassword").value.trim();
 
-    async function ownerLogin() {
-      const t = translations[currentLang];
-      const phone = document.getElementById("ownerPhone").value.trim();
-      const password = document.getElementById("ownerPassword").value.trim();
-
-      if (!phone || !password) {
-        setLoginStatus(t.fillFields, true);
+      if (!contact || !password) {
+        setLoginStatus("Please enter mobile number and password.", true);
         return;
       }
 
-      setLoginStatus(t.loggingIn);
-
-      const { data, error } = await sb
-        .from("mess")
-        .select("*")
-        .eq("contact", phone)
-        .eq("password", password)
-        .limit(1);
-
-if (error) {
-  console.log("UPDATE ERROR:", error);
-  status.className = "status error";
-  status.innerText = "Save failed: " + (error.message || JSON.stringify(error));
-  return;
-}
-
-      if (!data || data.length === 0) {
-        setLoginStatus(t.wrongCreds, true);
+      if (contact.length < 10) {
+        setLoginStatus("Please enter a valid mobile number.", true);
         return;
       }
 
-      const owner = data[0];
+      setLoginDisabled(true);
+      setLoginStatus("Logging in...");
 
-      localStorage.setItem("ownerPhone", phone);
-      localStorage.setItem("ownerMessId", owner.id);
-      localStorage.setItem("ownerMessName", owner.name || "");
+      try {
+        const partnerEmail = buildPartnerEmail(contact);
 
-      setLoginStatus(t.success);
+        const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({
+          email: partnerEmail,
+          password: password
+        });
 
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 500);
+        if (loginError || !loginData.user) {
+          console.log("Login error:", loginError);
+          setLoginStatus("Invalid mobile number or password.", true);
+          setLoginDisabled(false);
+          return;
+        }
+
+        const { data: messData, error: messError } = await sb
+          .from("mess")
+          .select("*")
+          .eq("user_id", loginData.user.id)
+          .single();
+
+        if (messError || !messData) {
+          console.log("Mess fetch error:", messError);
+          setLoginStatus("Login successful, but no mess profile found.", true);
+          setLoginDisabled(false);
+          return;
+        }
+
+        localStorage.setItem("ownerUserId", loginData.user.id);
+        localStorage.setItem("ownerMessId", messData.id);
+        localStorage.setItem("ownerMessName", messData.name || "");
+        localStorage.setItem("ownerPhone", messData.contact || contact);
+
+        setLoginStatus("Login successful! Opening dashboard...");
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 700);
+
+      } catch (err) {
+        console.log("Unexpected login error:", err);
+        setLoginStatus(err.message || "Something went wrong during login.", true);
+        setLoginDisabled(false);
+      }
     }
 
-    setLanguage(currentLang);
+    document.getElementById("loginPassword").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        loginPartner();
+      }
+    });
   </script>
-
 </body>
 </html>
