@@ -7,166 +7,157 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    :root{
+      --text:#f5f7fb;
+      --muted:#cfd6e2;
+      --accent:#ff9800;
+      --accent2:#ffbf66;
+      --card:rgba(12,15,22,.88);
+      --line:rgba(255,255,255,.12);
+      --danger:#ffb3b3;
+      --ok:#8df0b5;
     }
 
-    :root {
-      --text: #f5f7fb;
-      --muted: #cfd6e2;
-      --accent: #ff9800;
-      --accent2: #ffbf66;
-      --card: rgba(12, 15, 22, 0.86);
-      --line: rgba(255, 255, 255, 0.12);
-      --danger: #ffb3b3;
-      --ok: #8df0b5;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      min-height: 100vh;
+    body{
+      font-family:Inter,sans-serif;
+      color:var(--text);
+      min-height:100vh;
       background:
-        radial-gradient(circle at top right, rgba(255, 152, 0, 0.14), transparent 25%),
-        linear-gradient(180deg, #0b0d12 0%, #131924 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+        radial-gradient(circle at top right,rgba(255,152,0,.16),transparent 25%),
+        radial-gradient(circle at bottom left,rgba(0,210,255,.08),transparent 30%),
+        linear-gradient(180deg,#0b0d12 0%,#131924 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
     }
 
-    button, input {
-      font-family: inherit;
+    button,input{font-family:inherit}
+    a{color:inherit;text-decoration:none}
+
+    .login-card{
+      width:min(460px,100%);
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:26px;
+      box-shadow:0 22px 55px rgba(0,0,0,.34);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    .brand{
+      margin-bottom:24px;
+      text-align:center;
     }
 
-    .login-card {
-      width: min(460px, 100%);
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 26px;
-      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.34);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    .brand h1{
+      font-family:Poppins,sans-serif;
+      font-size:36px;
+      line-height:1;
+      background:linear-gradient(90deg,#fff 0%,#fff4e8 30%,#ffd699 58%,#ffb347 76%,#ff9800 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin-bottom:8px;
     }
 
-    .brand {
-      margin-bottom: 24px;
-      text-align: center;
+    .brand p{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
     }
 
-    .brand h1 {
-      font-family: 'Poppins', sans-serif;
-      font-size: 36px;
-      line-height: 1;
-      background: linear-gradient(90deg, #ffffff 0%, #fff4e8 30%, #ffd699 58%, #ffb347 76%, #ff9800 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
+    .field-group{
+      display:grid;
+      gap:8px;
+      margin-bottom:15px;
     }
 
-    .brand p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
+    .label{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:#ffcc80;
     }
 
-    .field-group {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 15px;
+    .input{
+      width:100%;
+      padding:15px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      font-size:15px;
+      outline:none;
     }
 
-    .label {
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #ffcc80;
+    .input::placeholder{
+      color:rgba(255,255,255,.55);
     }
 
-    .input {
-      width: 100%;
-      padding: 15px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.06);
-      color: #fff;
-      font-size: 15px;
-      outline: none;
+    .input:focus{
+      border-color:rgba(255,179,71,.65);
+      box-shadow:0 0 0 3px rgba(255,152,0,.08);
     }
 
-    .input::placeholder {
-      color: rgba(255, 255, 255, 0.55);
+    .login-btn{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:16px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      color:#111;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 14px 30px rgba(255,152,0,.24);
+      margin-top:6px;
     }
 
-    .input:focus {
-      border-color: rgba(255, 179, 71, 0.65);
-      box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.08);
+    .login-btn:disabled{
+      opacity:.65;
+      cursor:not-allowed;
     }
 
-    .login-btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 16px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      color: #111;
-      font-size: 15px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 14px 30px rgba(255, 152, 0, 0.24);
-      margin-top: 6px;
+    .status{
+      min-height:22px;
+      margin-top:12px;
+      font-size:14px;
+      color:var(--ok);
+      text-align:center;
+      line-height:1.5;
     }
 
-    .login-btn:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
+    .status.error{
+      color:var(--danger);
     }
 
-    .status {
-      min-height: 22px;
-      margin-top: 12px;
-      font-size: 14px;
-      color: var(--ok);
-      text-align: center;
-      line-height: 1.5;
+    .bottom-text{
+      margin-top:18px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
     }
 
-    .status.error {
-      color: var(--danger);
+    .bottom-text a{
+      color:#ffcc80;
+      font-weight:900;
     }
 
-    .bottom-text {
-      margin-top: 18px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .bottom-text a {
-      color: #ffcc80;
-      font-weight: 800;
-    }
-
-    .small-note {
-      margin-top: 14px;
-      color: rgba(255,255,255,0.58);
-      font-size: 12px;
-      line-height: 1.6;
-      text-align: center;
+    .small-note{
+      margin-top:14px;
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+      line-height:1.6;
+      text-align:center;
     }
   </style>
 </head>
@@ -184,7 +175,7 @@
         type="text"
         id="loginContact"
         class="input"
-        placeholder="Enter registered mobile number"
+        placeholder="Enter 10 digit mobile number"
         maxlength="15"
       />
     </div>
@@ -211,7 +202,7 @@
     </div>
 
     <div class="small-note">
-      Use the same mobile number and password that you used during registration.
+      Enter only your 10 digit mobile number. Do not add +91.
     </div>
   </div>
 
@@ -222,114 +213,126 @@
     const SUPABASE_KEY = "sb_publishable_fwhxfVqWpDrro8hkQbQQRA_1crMexZv";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function normalizePhone(phone) {
-      return phone.replace(/\D/g, "");
+    function normalizePhone(phone){
+      return String(phone || "").replace(/\D/g, "");
     }
 
-    function buildPartnerEmail(phone) {
-      return `${normalizePhone(phone)}@mealbuzz.partner`;
+    function last10(phone){
+      const clean = normalizePhone(phone);
+      return clean.length > 10 ? clean.slice(-10) : clean;
     }
 
-    function setLoginStatus(message, isError = false) {
+    function buildPartnerEmail(phone){
+      return `${last10(phone)}@mealbuzz.partner`;
+    }
+
+    function setLoginStatus(message,isError=false){
       const status = document.getElementById("loginStatus");
       status.innerText = message;
       status.className = isError ? "status error" : "status";
     }
 
-    function setLoginDisabled(disabled) {
+    function setLoginDisabled(disabled){
       document.getElementById("loginBtn").disabled = disabled;
     }
 
-    async function loginPartner() {
-      const contact = normalizePhone(document.getElementById("loginContact").value.trim());
+    async function loginPartner(){
+      const rawContact = document.getElementById("loginContact").value.trim();
+      const contact10 = last10(rawContact);
       const password = document.getElementById("loginPassword").value.trim();
 
-      if (!contact || !password) {
-        setLoginStatus("Please enter mobile number and password.", true);
+      if(!contact10 || !password){
+        setLoginStatus("Please enter mobile number and password.",true);
         return;
       }
 
-      if (contact.length < 10) {
-        setLoginStatus("Please enter a valid mobile number.", true);
+      if(contact10.length !== 10){
+        setLoginStatus("Please enter 10 digit mobile number.",true);
         return;
       }
 
       setLoginDisabled(true);
       setLoginStatus("Checking login...");
 
-      try {
-        let loggedInUserId = null;
-
-        // Method 1: New Supabase Auth login
-        const partnerEmail = buildPartnerEmail(contact);
+      try{
+        // 1. Try Supabase Auth login for new accounts
+        const partnerEmail = buildPartnerEmail(contact10);
 
         const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({
           email: partnerEmail,
           password: password
         });
 
-        if (!loginError && loginData?.user) {
-          loggedInUserId = loginData.user.id;
-
+        if(!loginError && loginData?.user){
           const { data: messByUser, error: messByUserError } = await sb
             .from("mess")
             .select("*")
-            .eq("user_id", loggedInUserId)
+            .eq("user_id", loginData.user.id)
             .maybeSingle();
 
-          if (!messByUserError && messByUser) {
-            localStorage.setItem("ownerUserId", loggedInUserId);
+          if(!messByUserError && messByUser){
+            localStorage.setItem("ownerUserId", loginData.user.id);
             localStorage.setItem("ownerMessId", messByUser.id);
             localStorage.setItem("ownerMessName", messByUser.name || "");
-            localStorage.setItem("ownerPhone", messByUser.contact || contact);
+            localStorage.setItem("ownerPhone", messByUser.contact || contact10);
 
             setLoginStatus("Login successful! Opening dashboard...");
-
             setTimeout(() => {
               window.location.href = "dashboard.html";
             }, 600);
-
             return;
           }
         }
 
-        // Method 2: Old account fallback login from mess table
-        const { data: oldMess, error: oldMessError } = await sb
+        // 2. Old registration fallback:
+        // Searches mess table and compares last 10 digits of saved mobile number.
+        const { data: allMess, error: fetchError } = await sb
           .from("mess")
-          .select("*")
-          .eq("contact", contact)
-          .eq("password", password)
-          .maybeSingle();
+          .select("*");
 
-        if (oldMessError || !oldMess) {
-          setLoginStatus("Invalid mobile number or password.", true);
+        if(fetchError){
+          console.log("Fetch error:", fetchError);
+          setLoginStatus("Login check failed. Supabase permission issue.",true);
           setLoginDisabled(false);
           return;
         }
 
-        localStorage.setItem("ownerMessId", oldMess.id);
-        localStorage.setItem("ownerMessName", oldMess.name || "");
-        localStorage.setItem("ownerPhone", oldMess.contact || contact);
+        const matchedMess = (allMess || []).find(row => {
+          const rowPhone10 = last10(row.contact);
+          const rowPassword = String(row.password || "").trim();
+          return rowPhone10 === contact10 && rowPassword === password;
+        });
 
-        if (oldMess.user_id) {
-          localStorage.setItem("ownerUserId", oldMess.user_id);
+        if(!matchedMess){
+          setLoginStatus("Invalid mobile number or password.",true);
+          setLoginDisabled(false);
+          return;
+        }
+
+        localStorage.setItem("ownerMessId", matchedMess.id);
+        localStorage.setItem("ownerMessName", matchedMess.name || "");
+        localStorage.setItem("ownerPhone", matchedMess.contact || contact10);
+
+        if(matchedMess.user_id){
+          localStorage.setItem("ownerUserId", matchedMess.user_id);
+        }else{
+          localStorage.removeItem("ownerUserId");
         }
 
         setLoginStatus("Login successful! Opening dashboard...");
-
         setTimeout(() => {
           window.location.href = "dashboard.html";
         }, 600);
 
-      } catch (err) {
+      }catch(err){
         console.log("Unexpected login error:", err);
-        setLoginStatus(err.message || "Something went wrong during login.", true);
+        setLoginStatus(err.message || "Something went wrong during login.",true);
         setLoginDisabled(false);
       }
     }
 
-    document.getElementById("loginPassword").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
+    document.getElementById("loginPassword").addEventListener("keydown",function(e){
+      if(e.key === "Enter"){
         loginPartner();
       }
     });
