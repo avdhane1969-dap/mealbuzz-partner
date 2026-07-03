@@ -122,9 +122,9 @@
       border: none;
       border-radius: 16px;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
-      color: #fff;
+      color: #111;
       font-size: 15px;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
       box-shadow: 0 14px 30px rgba(255, 152, 0, 0.24);
       margin-top: 6px;
@@ -255,9 +255,12 @@
       }
 
       setLoginDisabled(true);
-      setLoginStatus("Logging in...");
+      setLoginStatus("Checking login...");
 
       try {
+        let loggedInUserId = null;
+
+        // Method 1: New Supabase Auth login
         const partnerEmail = buildPartnerEmail(contact);
 
         const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({
@@ -265,36 +268,58 @@
           password: password
         });
 
-        if (loginError || !loginData.user) {
-          console.log("Login error:", loginError);
+        if (!loginError && loginData?.user) {
+          loggedInUserId = loginData.user.id;
+
+          const { data: messByUser, error: messByUserError } = await sb
+            .from("mess")
+            .select("*")
+            .eq("user_id", loggedInUserId)
+            .maybeSingle();
+
+          if (!messByUserError && messByUser) {
+            localStorage.setItem("ownerUserId", loggedInUserId);
+            localStorage.setItem("ownerMessId", messByUser.id);
+            localStorage.setItem("ownerMessName", messByUser.name || "");
+            localStorage.setItem("ownerPhone", messByUser.contact || contact);
+
+            setLoginStatus("Login successful! Opening dashboard...");
+
+            setTimeout(() => {
+              window.location.href = "dashboard.html";
+            }, 600);
+
+            return;
+          }
+        }
+
+        // Method 2: Old account fallback login from mess table
+        const { data: oldMess, error: oldMessError } = await sb
+          .from("mess")
+          .select("*")
+          .eq("contact", contact)
+          .eq("password", password)
+          .maybeSingle();
+
+        if (oldMessError || !oldMess) {
           setLoginStatus("Invalid mobile number or password.", true);
           setLoginDisabled(false);
           return;
         }
 
-        const { data: messData, error: messError } = await sb
-          .from("mess")
-          .select("*")
-          .eq("user_id", loginData.user.id)
-          .single();
+        localStorage.setItem("ownerMessId", oldMess.id);
+        localStorage.setItem("ownerMessName", oldMess.name || "");
+        localStorage.setItem("ownerPhone", oldMess.contact || contact);
 
-        if (messError || !messData) {
-          console.log("Mess fetch error:", messError);
-          setLoginStatus("Login successful, but no mess profile found.", true);
-          setLoginDisabled(false);
-          return;
+        if (oldMess.user_id) {
+          localStorage.setItem("ownerUserId", oldMess.user_id);
         }
-
-        localStorage.setItem("ownerUserId", loginData.user.id);
-        localStorage.setItem("ownerMessId", messData.id);
-        localStorage.setItem("ownerMessName", messData.name || "");
-        localStorage.setItem("ownerPhone", messData.contact || contact);
 
         setLoginStatus("Login successful! Opening dashboard...");
 
         setTimeout(() => {
           window.location.href = "dashboard.html";
-        }, 700);
+        }, 600);
 
       } catch (err) {
         console.log("Unexpected login error:", err);
