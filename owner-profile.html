@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -17,19 +17,20 @@
       --muted:#cfd6e2;
       --accent:#ff9800;
       --accent2:#ffbf66;
-      --card:rgba(12,15,22,0.84);
-      --line:rgba(255,255,255,0.12);
+      --card:rgba(12,15,22,.88);
+      --line:rgba(255,255,255,.12);
       --ok:#8df0b5;
       --danger:#ffb3b3;
     }
 
     body{
-      font-family:'Inter',sans-serif;
+      font-family:Inter,sans-serif;
       color:var(--text);
       min-height:100vh;
       background:
-        radial-gradient(circle at top right, rgba(255,152,0,0.10), transparent 22%),
-        linear-gradient(180deg,#0b0d12 0%, #131924 100%);
+        radial-gradient(circle at top right,rgba(255,152,0,.16),transparent 25%),
+        radial-gradient(circle at bottom left,rgba(0,210,255,.08),transparent 30%),
+        linear-gradient(180deg,#0b0d12 0%,#131924 100%);
     }
 
     button,input,textarea{font-family:inherit}
@@ -38,7 +39,7 @@
     .page{
       width:min(980px,100%);
       margin:0 auto;
-      padding:18px 16px 28px;
+      padding:18px 16px 34px;
       display:grid;
       gap:18px;
     }
@@ -52,20 +53,20 @@
     }
 
     .brand h1{
-      font-family:'Poppins',sans-serif;
+      font-family:Poppins,sans-serif;
       font-size:34px;
       line-height:1;
-      background:linear-gradient(90deg,#ffffff 0%, #fff4e8 30%, #ffd699 58%, #ffb347 76%, #ff9800 100%);
+      background:linear-gradient(90deg,#fff,#ffe7bd,#ff9800);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
     }
 
     .brand p{
-      margin-top:6px;
+      margin-top:7px;
       font-size:12px;
-      font-weight:800;
-      letter-spacing:3px;
+      font-weight:900;
+      letter-spacing:2.5px;
       color:#e9eef6;
       text-transform:uppercase;
     }
@@ -73,15 +74,15 @@
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:24px;
+      border-radius:26px;
       padding:20px;
-      box-shadow:0 18px 44px rgba(0,0,0,0.24);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
+      box-shadow:0 22px 52px rgba(0,0,0,.28);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
     }
 
     .section-title{
-      font-family:'Poppins',sans-serif;
+      font-family:Poppins,sans-serif;
       font-size:24px;
       margin-bottom:8px;
     }
@@ -105,7 +106,7 @@
 
     .label{
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       letter-spacing:1px;
       text-transform:uppercase;
       color:#ffcc80;
@@ -116,30 +117,47 @@
       padding:14px 15px;
       border-radius:16px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,0.06);
+      background:rgba(255,255,255,.06);
       color:#fff;
       font-size:14px;
       outline:none;
     }
 
     .textarea{
-      min-height:100px;
+      min-height:105px;
       resize:vertical;
       line-height:1.7;
     }
 
-    .save-btn,.back-btn{
+    .input::placeholder,.textarea::placeholder{
+      color:rgba(255,255,255,.55);
+    }
+
+    .input:focus,.textarea:focus{
+      border-color:rgba(255,152,0,.55);
+      box-shadow:0 0 0 3px rgba(255,152,0,.10);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .save-btn,.back-btn,.logout-btn{
       border:none;
       cursor:pointer;
       border-radius:14px;
-      font-weight:800;
+      font-weight:900;
       padding:14px 18px;
       font-size:15px;
     }
 
     .save-btn{
       background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#fff;
+      color:#111;
+      width:100%;
+      box-shadow:0 14px 30px rgba(255,152,0,.22);
     }
 
     .save-btn:disabled{
@@ -148,9 +166,15 @@
     }
 
     .back-btn{
-      background:rgba(255,255,255,0.05);
+      background:rgba(255,255,255,.06);
       color:#fff;
       border:1px solid var(--line);
+    }
+
+    .logout-btn{
+      background:rgba(255,80,80,.12);
+      color:#ffd6d6;
+      border:1px solid rgba(255,120,120,.25);
     }
 
     .status{
@@ -158,22 +182,52 @@
       font-size:14px;
       color:var(--ok);
       margin-top:8px;
+      line-height:1.6;
     }
 
     .status.error{
       color:var(--danger);
     }
 
+    .preview{
+      margin-top:14px;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--muted);
+      line-height:1.7;
+      font-size:13px;
+    }
+
+    .preview img{
+      width:100%;
+      max-height:240px;
+      object-fit:cover;
+      border-radius:16px;
+      margin-top:10px;
+      border:1px solid rgba(255,255,255,.10);
+    }
+
     @media(min-width:820px){
       .form-grid{
         grid-template-columns:1fr 1fr;
       }
+
       .full{
-        grid-column:1 / -1;
+        grid-column:1/-1;
       }
+    }
+
+    @media(max-width:520px){
+      .brand h1{font-size:28px}
+      .actions{width:100%}
+      .back-btn,.logout-btn{width:100%}
+      .card{padding:17px;border-radius:22px}
     }
   </style>
 </head>
+
 <body>
   <div class="page">
     <div class="topbar">
@@ -181,12 +235,18 @@
         <h1>Meal Buzz Partner</h1>
         <p>Owner Profile</p>
       </div>
-      <a href="dashboard.html"><button class="back-btn" type="button">Back</button></a>
+
+      <div class="actions">
+        <a href="dashboard.html"><button class="back-btn" type="button">Back to Dashboard</button></a>
+        <button class="logout-btn" type="button" onclick="logoutOwner()">Logout</button>
+      </div>
     </div>
 
     <div class="card">
       <div class="section-title">Edit Your Mess Details</div>
-      <div class="section-sub">इथे profile details बदलता येतील.</div>
+      <div class="section-sub">
+        Update owner name, mess name, price, address and main image.
+      </div>
 
       <div class="form-grid">
         <div class="field-group">
@@ -196,7 +256,7 @@
 
         <div class="field-group">
           <div class="label">Mobile Number</div>
-          <input type="text" id="contact" class="input" placeholder="Mobile number" maxlength="15">
+          <input type="text" id="contact" class="input" placeholder="10 digit mobile number" maxlength="15">
         </div>
 
         <div class="field-group">
@@ -206,21 +266,24 @@
 
         <div class="field-group">
           <div class="label">Price</div>
-          <input type="text" id="price" class="input" placeholder="Price">
+          <input type="text" id="price" class="input" placeholder="₹80 / ₹100 / ₹3000 monthly">
         </div>
 
         <div class="field-group full">
           <div class="label">Address / Location</div>
-          <textarea id="location" class="textarea" placeholder="Address"></textarea>
+          <textarea id="location" class="textarea" placeholder="Area, address, landmark"></textarea>
         </div>
 
         <div class="field-group full">
-          <div class="label">Change Main Image (optional)</div>
+          <div class="label">Change Main Image Optional</div>
           <input type="file" id="mainImage" class="file-input" accept="image/*">
+          <div class="preview" id="imagePreview">Current image will appear here if available.</div>
         </div>
 
         <div class="field-group full">
-          <button class="save-btn" id="saveBtn" onclick="saveProfile()" type="button">Save Changes</button>
+          <button class="save-btn" id="saveBtn" onclick="saveProfile()" type="button">
+            Save Changes
+          </button>
           <div class="status" id="statusText"></div>
         </div>
       </div>
@@ -228,15 +291,26 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     const SUPABASE_URL = "https://iinvhwsbnvmcujyrzlxe.supabase.co";
-    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const SUPABASE_KEY = "sb_publishable_fwhxfVqWpDrro8hkQbQQRA_1crMexZv";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentMessId = null;
     let currentUserId = null;
+    let currentMessData = null;
 
-    function setStatus(message, isError = false){
+    function normalizePhone(phone){
+      return String(phone || "").replace(/\D/g,"");
+    }
+
+    function last10(phone){
+      const clean = normalizePhone(phone);
+      return clean.length > 10 ? clean.slice(-10) : clean;
+    }
+
+    function setStatus(message,isError=false){
       const box = document.getElementById("statusText");
       box.innerText = message;
       box.className = isError ? "status error" : "status";
@@ -246,23 +320,34 @@
       document.getElementById("saveBtn").disabled = disabled;
     }
 
-    function normalizePhone(phone){
-      return phone.replace(/\D/g, "");
+    function showImagePreview(url){
+      const box = document.getElementById("imagePreview");
+
+      if(!url){
+        box.innerHTML = "No image uploaded yet.";
+        return;
+      }
+
+      box.innerHTML = `
+        Current main image:
+        <img src="${url}" alt="Mess image">
+      `;
     }
 
     async function getCurrentMess(){
+      // Method 1: logged-in Supabase Auth user
       const { data: authData, error: authError } = await sb.auth.getUser();
 
-      if (!authError && authData?.user) {
+      if(!authError && authData?.user){
         currentUserId = authData.user.id;
 
         const { data: messByUser, error: messError } = await sb
           .from("mess")
-          .select("id, user_id, owner_name, contact, name, price, location, image_url")
+          .select("*")
           .eq("user_id", currentUserId)
-          .single();
+          .maybeSingle();
 
-        if (!messError && messByUser) {
+        if(!messError && messByUser){
           currentMessId = messByUser.id;
           localStorage.setItem("ownerMessId", messByUser.id);
           localStorage.setItem("ownerUserId", currentUserId);
@@ -270,20 +355,24 @@
         }
       }
 
+      // Method 2: old login fallback from localStorage
       const ownerMessId = localStorage.getItem("ownerMessId");
-      if (!ownerMessId) return null;
 
-      const { data: messById, error: messByIdError } = await sb
-        .from("mess")
-        .select("id, user_id, owner_name, contact, name, price, location, image_url")
-        .eq("id", Number(ownerMessId))
-        .single();
+      if(ownerMessId){
+        const { data: messById, error: idError } = await sb
+          .from("mess")
+          .select("*")
+          .eq("id", Number(ownerMessId))
+          .maybeSingle();
 
-      if (messByIdError || !messById) return null;
+        if(!idError && messById){
+          currentMessId = messById.id;
+          currentUserId = messById.user_id || localStorage.getItem("ownerUserId") || null;
+          return messById;
+        }
+      }
 
-      currentMessId = messById.id;
-      currentUserId = messById.user_id || null;
-      return messById;
+      return null;
     }
 
     async function loadProfile(){
@@ -291,13 +380,15 @@
 
       const data = await getCurrentMess();
 
-      if (!data) {
-        setStatus("Could not load profile. Please login again.", true);
+      if(!data){
+        setStatus("Could not load profile. Please login again.",true);
         setTimeout(() => {
           window.location.href = "index.html";
-        }, 1200);
+        },1200);
         return;
       }
+
+      currentMessData = data;
 
       document.getElementById("ownerName").value = data.owner_name || "";
       document.getElementById("contact").value = data.contact || "";
@@ -305,25 +396,27 @@
       document.getElementById("price").value = data.price || "";
       document.getElementById("location").value = data.location || "";
 
+      showImagePreview(data.image_url || null);
+
       setStatus("");
     }
 
     async function uploadMainImage(file){
-      if (!file) return null;
+      if(!file) return null;
 
-      const cleanName = file.name.replace(/\s+/g, "-");
+      const cleanName = file.name.replace(/\s+/g,"-");
       const fileName = `profile-${Date.now()}-${cleanName}`;
 
       const { error: uploadError } = await sb.storage
         .from("mess-images")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: false
+        .upload(fileName,file,{
+          cacheControl:"3600",
+          upsert:false
         });
 
-      if (uploadError) {
-        console.log("Upload error:", uploadError);
-        return { error: true, message: uploadError.message };
+      if(uploadError){
+        console.log("Upload error:",uploadError);
+        return { error:true, message:uploadError.message };
       }
 
       const { data: publicData } = sb.storage
@@ -335,38 +428,38 @@
 
     async function saveProfile(){
       const ownerName = document.getElementById("ownerName").value.trim();
-      const contact = normalizePhone(document.getElementById("contact").value.trim());
+      const contact = last10(document.getElementById("contact").value.trim());
       const messName = document.getElementById("messName").value.trim();
       const price = document.getElementById("price").value.trim();
       const location = document.getElementById("location").value.trim();
       const mainImageFile = document.getElementById("mainImage").files[0];
 
-      if (!ownerName || !contact || !messName || !price || !location) {
-        setStatus("Please fill all details.", true);
+      if(!ownerName || !contact || !messName || !price || !location){
+        setStatus("Please fill all details.",true);
         return;
       }
 
-      if (contact.length < 10) {
-        setStatus("Please enter a valid mobile number.", true);
+      if(contact.length !== 10){
+        setStatus("Please enter valid 10 digit mobile number.",true);
         return;
       }
 
-      if (!currentMessId) {
-        setStatus("Mess ID not found. Please login again.", true);
+      if(!currentMessId){
+        setStatus("Mess ID not found. Please login again.",true);
         return;
       }
 
       setSaveDisabled(true);
 
-      try {
+      try{
         let imageUrl = null;
 
-        if (mainImageFile) {
+        if(mainImageFile){
           setStatus("Uploading image...");
           imageUrl = await uploadMainImage(mainImageFile);
 
-          if (imageUrl && imageUrl.error) {
-            setStatus(imageUrl.message || "Image upload failed.", true);
+          if(imageUrl && imageUrl.error){
+            setStatus(imageUrl.message || "Image upload failed.",true);
             setSaveDisabled(false);
             return;
           }
@@ -379,39 +472,62 @@
           contact: contact,
           name: messName,
           price: price,
-          location: location
+          location: location,
+          updated_at: new Date().toISOString()
         };
 
-        if (imageUrl) payload.image_url = imageUrl;
+        if(imageUrl){
+          payload.image_url = imageUrl;
+        }
 
         let query = sb.from("mess").update(payload);
 
-        if (currentUserId) {
+        if(currentUserId){
           query = query.eq("user_id", currentUserId);
-        } else {
+        }else{
           query = query.eq("id", Number(currentMessId));
         }
 
         const { error } = await query;
 
-        if (error) {
-          setStatus("Save failed: " + error.message, true);
+        if(error){
+          console.log("Save profile error:",error);
+          setStatus("Save failed: " + error.message,true);
           setSaveDisabled(false);
           return;
         }
 
-        localStorage.setItem("ownerPhone", contact);
-        localStorage.setItem("ownerMessName", messName);
-        localStorage.setItem("ownerMessId", currentMessId);
+        localStorage.setItem("ownerPhone",contact);
+        localStorage.setItem("ownerMessName",messName);
+        localStorage.setItem("ownerMessId",currentMessId);
+
+        if(imageUrl){
+          showImagePreview(imageUrl);
+        }
 
         setStatus("Profile updated successfully.");
         setSaveDisabled(false);
 
-      } catch (err) {
-        console.log("Unexpected error:", err);
-        setStatus(err.message || "Something went wrong.", true);
+      }catch(err){
+        console.log("Unexpected error:",err);
+        setStatus(err.message || "Something went wrong.",true);
         setSaveDisabled(false);
       }
+    }
+
+    async function logoutOwner(){
+      try{
+        await sb.auth.signOut();
+      }catch(e){
+        console.log(e);
+      }
+
+      localStorage.removeItem("ownerUserId");
+      localStorage.removeItem("ownerMessId");
+      localStorage.removeItem("ownerMessName");
+      localStorage.removeItem("ownerPhone");
+
+      window.location.href = "index.html";
     }
 
     loadProfile();
