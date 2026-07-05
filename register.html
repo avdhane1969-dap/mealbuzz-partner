@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Meal Buzz Partner - Register</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
@@ -31,14 +33,8 @@
         linear-gradient(180deg,#0b0d12 0%, #131924 100%);
     }
 
-    button,input,textarea{
-      font-family:inherit;
-    }
-
-    a{
-      text-decoration:none;
-      color:inherit;
-    }
+    button,input,textarea{font-family:inherit}
+    a{text-decoration:none;color:inherit}
 
     .page{
       width:min(1180px,100%);
@@ -107,7 +103,7 @@
 
     .lang-btn.active{
       background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#fff;
+      color:#111;
     }
 
     .ghost-btn{
@@ -245,9 +241,14 @@
       padding:15px 18px;
       font-size:15px;
       background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#fff;
+      color:#111;
       width:100%;
       box-shadow:0 12px 28px rgba(255,152,0,0.22);
+    }
+
+    .submit-btn:disabled{
+      opacity:.65;
+      cursor:not-allowed;
     }
 
     .status{
@@ -255,11 +256,10 @@
       font-size:14px;
       color:var(--ok);
       margin-top:6px;
+      line-height:1.6;
     }
 
-    .status.error{
-      color:var(--danger);
-    }
+    .status.error{color:var(--danger)}
 
     .info-grid{
       display:grid;
@@ -294,20 +294,13 @@
         align-items:start;
       }
 
-      .form-grid{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .full{
-        grid-column:1 / -1;
-      }
-
-      .info-grid{
-        grid-template-columns:1fr 1fr;
-      }
+      .form-grid{grid-template-columns:1fr 1fr}
+      .full{grid-column:1 / -1}
+      .info-grid{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
+
 <body>
   <div class="page">
     <div class="topbar">
@@ -318,10 +311,10 @@
 
       <div class="top-actions">
         <div class="lang-switch">
-          <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')">मराठी</button>
-          <button class="lang-btn" id="enBtn" onclick="setLanguage('en')">English</button>
+          <button class="lang-btn active" id="mrBtn" onclick="setLanguage('mr')" type="button">मराठी</button>
+          <button class="lang-btn" id="enBtn" onclick="setLanguage('en')" type="button">English</button>
         </div>
-        <a href="index.html"><button class="ghost-btn" id="backBtn">Back</button></a>
+        <a href="index.html"><button class="ghost-btn" id="backBtn" type="button">Back</button></a>
       </div>
     </div>
 
@@ -340,7 +333,7 @@
 
           <div class="field-group">
             <div class="label" id="phoneLabel">Mobile Number</div>
-            <input type="text" id="contact" class="input" placeholder="नोंदणीकृत मोबाइल नंबर">
+            <input type="text" id="contact" class="input" placeholder="नोंदणीकृत मोबाइल नंबर" inputmode="numeric" maxlength="15">
           </div>
 
           <div class="field-group">
@@ -365,7 +358,7 @@
 
           <div class="field-group">
             <div class="label" id="imageLabel">Main Image (optional)</div>
-            <input type="file" id="mainImage" class="file-input" accept="image/*">
+            <input type="file" id="mainImage" class="file-input" accept="image/jpeg,image/png,image/webp">
             <div class="helper" id="imageHelper">ही default image म्हणून वापरली जाईल. Veg/Non-Veg specific image नंतर update करू शकता.</div>
           </div>
 
@@ -424,6 +417,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     const SUPABASE_URL = "https://iinvhwsbnvmcujyrzlxe.supabase.co";
     const SUPABASE_KEY = "sb_publishable_fwhxfVqWpDrro8hkQbQQRA_1crMexZv";
@@ -532,7 +526,22 @@
       }
     };
 
-    function t(){ return translations[currentLang]; }
+    function t(){
+      return translations[currentLang];
+    }
+
+    function normalizePhone(phone){
+      return String(phone || "").replace(/\D/g, "");
+    }
+
+    function last10(phone){
+      const clean = normalizePhone(phone);
+      return clean.length > 10 ? clean.slice(-10) : clean;
+    }
+
+    function buildPartnerEmail(phone){
+      return `${last10(phone)}@mealbuzz.partner`;
+    }
 
     function setStatus(message, isError = false){
       const box = document.getElementById("statusText");
@@ -540,10 +549,14 @@
       box.className = isError ? "status error" : "status";
     }
 
+    function setSubmitDisabled(disabled){
+      document.getElementById("submitBtn").disabled = disabled;
+    }
+
     function updateCoordsBox(){
-      if (pinnedLat === null || pinnedLon === null) {
+      if(pinnedLat === null || pinnedLon === null){
         document.getElementById("coordsBox").innerHTML = t().coordsEmpty;
-      } else {
+      }else{
         document.getElementById("coordsBox").innerHTML = t().coordsOk(pinnedLat, pinnedLon);
       }
     }
@@ -595,7 +608,7 @@
     }
 
     function pinCurrentLocation(){
-      if (!navigator.geolocation) {
+      if(!navigator.geolocation){
         setStatus(t().pinFail, true);
         return;
       }
@@ -624,98 +637,182 @@
     }
 
     async function uploadMainImage(file){
-      if (!file) return null;
+      if(!file) return null;
 
-      const fileName = `main-${Date.now()}-${file.name}`;
-      const { error: uploadError } = await sb.storage.from("mess-images").upload(fileName, file);
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
-      if (uploadError) return { error: true };
+      if(!allowedTypes.includes(file.type)){
+        throw new Error("Only JPG, PNG or WEBP images are allowed.");
+      }
 
-      const { data: publicData } = sb.storage.from("mess-images").getPublicUrl(fileName);
-      return publicData.publicUrl;
+      const maxSizeMB = 5;
+
+      if(file.size > maxSizeMB * 1024 * 1024){
+        throw new Error("Image size should be below 5 MB.");
+      }
+
+      const cleanName = file.name
+        .toLowerCase()
+        .replace(/[^a-z0-9.]/g, "-")
+        .replace(/-+/g, "-");
+
+      const filePath = `mess-main/${Date.now()}-${cleanName}`;
+
+      const { error: uploadError } = await sb.storage
+        .from("mess-images")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false
+        });
+
+      if(uploadError){
+        console.log("Image upload error:", uploadError);
+        throw new Error(t().uploadFail);
+      }
+
+      const { data: publicData } = sb.storage
+        .from("mess-images")
+        .getPublicUrl(filePath);
+
+      return publicData?.publicUrl || null;
+    }
+
+    async function checkExistingMess(contact10){
+      const { data, error } = await sb
+        .from("mess")
+        .select("id, contact, name")
+        .limit(1000);
+
+      if(error){
+        console.log("Existing mess check error:", error);
+        throw new Error("Could not check existing mess.");
+      }
+
+      return (data || []).find(row => last10(row.contact) === contact10);
+    }
+
+    async function createAuthUser(contact10, password){
+      const partnerEmail = buildPartnerEmail(contact10);
+
+      const { data, error } = await sb.auth.signUp({
+        email: partnerEmail,
+        password: password
+      });
+
+      if(error){
+        console.log("Auth signup error:", error);
+
+        const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({
+          email: partnerEmail,
+          password: password
+        });
+
+        if(!loginError && loginData?.user){
+          return loginData.user.id;
+        }
+
+        return null;
+      }
+
+      return data?.user?.id || null;
     }
 
     async function registerMess(){
       const ownerName = document.getElementById("ownerName").value.trim();
-      const contact = document.getElementById("contact").value.trim();
+      const rawContact = document.getElementById("contact").value.trim();
+      const contact10 = last10(rawContact);
       const password = document.getElementById("password").value.trim();
       const messName = document.getElementById("messName").value.trim();
       const location = document.getElementById("location").value.trim();
       const price = document.getElementById("price").value.trim();
-      const mainImageFile = document.getElementById("mainImage").files[0];
+      const imageFile = document.getElementById("mainImage").files[0];
 
-      if (!ownerName || !contact || !password || !messName || !location || !price) {
+      if(!ownerName || !contact10 || !password || !messName || !location || !price){
         setStatus(t().fillAll, true);
         return;
       }
 
-      setStatus(t().checking);
-
-      const { data: existing, error: checkError } = await sb
-        .from("mess")
-        .select("id")
-        .eq("contact", contact)
-        .limit(1);
-
-      if (checkError) {
-        setStatus(t().saveFail, true);
+      if(contact10.length !== 10){
+        setStatus("Please enter valid 10 digit mobile number.", true);
         return;
       }
 
-      if (existing && existing.length > 0) {
-        setStatus(t().numberExists, true);
+      if(password.length < 6){
+        setStatus("Password must be at least 6 characters.", true);
         return;
       }
 
-      let mainImageUrl = null;
+      setSubmitDisabled(true);
 
-      if (mainImageFile) {
-        setStatus(t().uploading);
-        mainImageUrl = await uploadMainImage(mainImageFile);
+      try{
+        setStatus(t().checking);
 
-        if (mainImageUrl && mainImageUrl.error) {
-          setStatus(t().uploadFail, true);
+        const existingMess = await checkExistingMess(contact10);
+
+        if(existingMess){
+          setStatus(t().numberExists, true);
+          setSubmitDisabled(false);
           return;
         }
-      } else {
+
         setStatus(t().uploading);
+
+        const userId = await createAuthUser(contact10, password);
+        const imageUrl = await uploadMainImage(imageFile);
+
+        const payload = {
+          owner_name: ownerName,
+          contact: contact10,
+          password: password,
+          name: messName,
+          location: location,
+          price: price,
+          latitude: pinnedLat,
+          longitude: pinnedLon,
+          image_url: imageUrl,
+          morning_menu: "",
+          lunch_menu: "",
+          dinner_menu: "",
+          status: "Open",
+          today_price: price,
+          updated_at: new Date().toISOString(),
+          user_id: userId
+        };
+
+        const { data: savedMess, error: saveError } = await sb
+          .from("mess")
+          .insert(payload)
+          .select("*")
+          .single();
+
+        if(saveError){
+          console.log("Mess save error:", saveError);
+          setStatus(`${t().saveFail} ${saveError.message || ""}`, true);
+          setSubmitDisabled(false);
+          return;
+        }
+
+        localStorage.setItem("ownerMessId", savedMess.id);
+        localStorage.setItem("ownerMessName", savedMess.name || "");
+        localStorage.setItem("ownerPhone", savedMess.contact || contact10);
+
+        if(savedMess.user_id){
+          localStorage.setItem("ownerUserId", savedMess.user_id);
+        }else{
+          localStorage.removeItem("ownerUserId");
+        }
+
+        setStatus(t().success);
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 800);
+
+      }catch(err){
+        console.log("Registration error:", err);
+        setStatus(err.message || t().saveFail, true);
+        setSubmitDisabled(false);
       }
-
-      const payload = {
-        owner_name: ownerName,
-        contact: contact,
-        password: password,
-        name: messName,
-        location: location,
-        price: price,
-        latitude: pinnedLat,
-        longitude: pinnedLon,
-        image_url: mainImageUrl || null
-      };
-
-      const { data, error } = await sb
-        .from("mess")
-        .insert([payload])
-        .select()
-        .limit(1);
-
-      if (error || !data || data.length === 0) {
-        console.log(error);
-        setStatus(t().saveFail, true);
-        return;
-      }
-
-      const saved = data[0];
-
-      localStorage.setItem("ownerPhone", contact);
-      localStorage.setItem("ownerMessId", saved.id);
-      localStorage.setItem("ownerMessName", messName);
-
-      setStatus(t().success);
-
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 700);
     }
 
     setLanguage(currentLang);
