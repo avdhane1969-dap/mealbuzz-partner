@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Meal Buzz Partner - Owner Profile</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -245,7 +246,7 @@
     <div class="card">
       <div class="section-title">Edit Your Mess Details</div>
       <div class="section-sub">
-        Update owner name, mess name, price, address and main image.
+        Update owner name, mobile number, mess name, price, address and main image.
       </div>
 
       <div class="form-grid">
@@ -256,7 +257,7 @@
 
         <div class="field-group">
           <div class="label">Mobile Number</div>
-          <input type="text" id="contact" class="input" placeholder="10 digit mobile number" maxlength="15">
+          <input type="text" id="contact" class="input" placeholder="10 digit mobile number" maxlength="15" inputmode="numeric">
         </div>
 
         <div class="field-group">
@@ -276,7 +277,7 @@
 
         <div class="field-group full">
           <div class="label">Change Main Image Optional</div>
-          <input type="file" id="mainImage" class="file-input" accept="image/*">
+          <input type="file" id="mainImage" class="file-input" accept="image/jpeg,image/png,image/webp">
           <div class="preview" id="imagePreview">Current image will appear here if available.</div>
         </div>
 
@@ -302,7 +303,7 @@
     let currentMessData = null;
 
     function normalizePhone(phone){
-      return String(phone || "").replace(/\D/g,"");
+      return String(phone || "").replace(/\D/g, "");
     }
 
     function last10(phone){
@@ -310,7 +311,7 @@
       return clean.length > 10 ? clean.slice(-10) : clean;
     }
 
-    function setStatus(message,isError=false){
+    function setStatus(message, isError = false){
       const box = document.getElementById("statusText");
       box.innerText = message;
       box.className = isError ? "status error" : "status";
@@ -335,27 +336,32 @@
     }
 
     async function getCurrentMess(){
-      // Method 1: logged-in Supabase Auth user
-      const { data: authData, error: authError } = await sb.auth.getUser();
+      const params = new URLSearchParams(window.location.search);
+      const urlMessId = params.get("id");
 
-      if(!authError && authData?.user){
-        currentUserId = authData.user.id;
-
-        const { data: messByUser, error: messError } = await sb
+      if(urlMessId){
+        const { data: messByUrlId, error: urlError } = await sb
           .from("mess")
           .select("*")
-          .eq("user_id", currentUserId)
+          .eq("id", Number(urlMessId))
           .maybeSingle();
 
-        if(!messError && messByUser){
-          currentMessId = messByUser.id;
-          localStorage.setItem("ownerMessId", messByUser.id);
-          localStorage.setItem("ownerUserId", currentUserId);
-          return messByUser;
+        if(!urlError && messByUrlId){
+          currentMessId = messByUrlId.id;
+          currentUserId = messByUrlId.user_id || localStorage.getItem("ownerUserId") || null;
+
+          localStorage.setItem("ownerMessId", messByUrlId.id);
+          localStorage.setItem("ownerMessName", messByUrlId.name || "");
+          localStorage.setItem("ownerPhone", messByUrlId.contact || "");
+
+          if(messByUrlId.user_id){
+            localStorage.setItem("ownerUserId", messByUrlId.user_id);
+          }
+
+          return messByUrlId;
         }
       }
 
-      // Method 2: old login fallback from localStorage
       const ownerMessId = localStorage.getItem("ownerMessId");
 
       if(ownerMessId){
@@ -372,56 +378,98 @@
         }
       }
 
+      const { data: authData, error: authError } = await sb.auth.getUser();
+
+      if(!authError && authData?.user){
+        currentUserId = authData.user.id;
+
+        const { data: messByUser, error: messError } = await sb
+          .from("mess")
+          .select("*")
+          .eq("user_id", currentUserId)
+          .maybeSingle();
+
+        if(!messError && messByUser){
+          currentMessId = messByUser.id;
+
+          localStorage.setItem("ownerMessId", messByUser.id);
+          localStorage.setItem("ownerUserId", currentUserId);
+          localStorage.setItem("ownerMessName", messByUser.name || "");
+          localStorage.setItem("ownerPhone", messByUser.contact || "");
+
+          return messByUser;
+        }
+      }
+
       return null;
     }
 
     async function loadProfile(){
       setStatus("Loading profile...");
 
-      const data = await getCurrentMess();
+      try{
+        const data = await getCurrentMess();
 
-      if(!data){
-        setStatus("Could not load profile. Please login again.",true);
-        setTimeout(() => {
-          window.location.href = "index.html";
-        },1200);
-        return;
+        if(!data){
+          setStatus("Could not load profile. Please go back to dashboard or login again.", true);
+          return;
+        }
+
+        currentMessData = data;
+
+        document.getElementById("ownerName").value = data.owner_name || "";
+        document.getElementById("contact").value = data.contact || "";
+        document.getElementById("messName").value = data.name || "";
+        document.getElementById("price").value = data.price || "";
+        document.getElementById("location").value = data.location || "";
+
+        showImagePreview(data.image_url || null);
+
+        setStatus("");
+
+      }catch(err){
+        console.log("Profile load error:", err);
+        setStatus(err.message || "Could not load profile.", true);
       }
-
-      currentMessData = data;
-
-      document.getElementById("ownerName").value = data.owner_name || "";
-      document.getElementById("contact").value = data.contact || "";
-      document.getElementById("messName").value = data.name || "";
-      document.getElementById("price").value = data.price || "";
-      document.getElementById("location").value = data.location || "";
-
-      showImagePreview(data.image_url || null);
-
-      setStatus("");
     }
 
     async function uploadMainImage(file){
       if(!file) return null;
 
-      const cleanName = file.name.replace(/\s+/g,"-");
-      const fileName = `profile-${Date.now()}-${cleanName}`;
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+      if(!allowedTypes.includes(file.type)){
+        throw new Error("Only JPG, PNG or WEBP images are allowed.");
+      }
+
+      const maxSizeMB = 5;
+
+      if(file.size > maxSizeMB * 1024 * 1024){
+        throw new Error("Image size should be below 5 MB.");
+      }
+
+      const cleanName = file.name
+        .toLowerCase()
+        .replace(/[^a-z0-9.]/g, "-")
+        .replace(/-+/g, "-");
+
+      const filePath = `mess-profile/${Date.now()}-${cleanName}`;
 
       const { error: uploadError } = await sb.storage
         .from("mess-images")
-        .upload(fileName,file,{
-          cacheControl:"3600",
-          upsert:false
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false
         });
 
       if(uploadError){
-        console.log("Upload error:",uploadError);
-        return { error:true, message:uploadError.message };
+        console.log("Upload error:", uploadError);
+        throw new Error(uploadError.message || "Image upload failed.");
       }
 
       const { data: publicData } = sb.storage
         .from("mess-images")
-        .getPublicUrl(fileName);
+        .getPublicUrl(filePath);
 
       return publicData?.publicUrl || null;
     }
@@ -435,17 +483,17 @@
       const mainImageFile = document.getElementById("mainImage").files[0];
 
       if(!ownerName || !contact || !messName || !price || !location){
-        setStatus("Please fill all details.",true);
+        setStatus("Please fill all details.", true);
         return;
       }
 
       if(contact.length !== 10){
-        setStatus("Please enter valid 10 digit mobile number.",true);
+        setStatus("Please enter valid 10 digit mobile number.", true);
         return;
       }
 
       if(!currentMessId){
-        setStatus("Mess ID not found. Please login again.",true);
+        setStatus("Mess ID not found. Please go back to dashboard or login again.", true);
         return;
       }
 
@@ -457,12 +505,6 @@
         if(mainImageFile){
           setStatus("Uploading image...");
           imageUrl = await uploadMainImage(mainImageFile);
-
-          if(imageUrl && imageUrl.error){
-            setStatus(imageUrl.message || "Image upload failed.",true);
-            setSaveDisabled(false);
-            return;
-          }
         }
 
         setStatus("Saving profile...");
@@ -480,26 +522,21 @@
           payload.image_url = imageUrl;
         }
 
-        let query = sb.from("mess").update(payload);
-
-        if(currentUserId){
-          query = query.eq("user_id", currentUserId);
-        }else{
-          query = query.eq("id", Number(currentMessId));
-        }
-
-        const { error } = await query;
+        const { error } = await sb
+          .from("mess")
+          .update(payload)
+          .eq("id", Number(currentMessId));
 
         if(error){
-          console.log("Save profile error:",error);
-          setStatus("Save failed: " + error.message,true);
+          console.log("Save profile error:", error);
+          setStatus("Save failed: " + error.message, true);
           setSaveDisabled(false);
           return;
         }
 
-        localStorage.setItem("ownerPhone",contact);
-        localStorage.setItem("ownerMessName",messName);
-        localStorage.setItem("ownerMessId",currentMessId);
+        localStorage.setItem("ownerPhone", contact);
+        localStorage.setItem("ownerMessName", messName);
+        localStorage.setItem("ownerMessId", currentMessId);
 
         if(imageUrl){
           showImagePreview(imageUrl);
@@ -509,8 +546,8 @@
         setSaveDisabled(false);
 
       }catch(err){
-        console.log("Unexpected error:",err);
-        setStatus(err.message || "Something went wrong.",true);
+        console.log("Unexpected error:", err);
+        setStatus(err.message || "Something went wrong.", true);
         setSaveDisabled(false);
       }
     }
@@ -519,7 +556,7 @@
       try{
         await sb.auth.signOut();
       }catch(e){
-        console.log(e);
+        console.log("Logout error:", e);
       }
 
       localStorage.removeItem("ownerUserId");
