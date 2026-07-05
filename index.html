@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Meal Buzz Partner Login</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,7 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
 
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
 
     :root{
       --text:#f5f7fb;
@@ -37,8 +42,14 @@
       padding:20px;
     }
 
-    button,input{font-family:inherit}
-    a{color:inherit;text-decoration:none}
+    button,input{
+      font-family:inherit;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
 
     .login-card{
       width:min(460px,100%);
@@ -177,6 +188,8 @@
         class="input"
         placeholder="Enter 10 digit mobile number"
         maxlength="15"
+        inputmode="numeric"
+        autocomplete="tel"
       />
     </div>
 
@@ -187,6 +200,7 @@
         id="loginPassword"
         class="input"
         placeholder="Enter password"
+        autocomplete="current-password"
       />
     </div>
 
@@ -226,7 +240,7 @@
       return `${last10(phone)}@mealbuzz.partner`;
     }
 
-    function setLoginStatus(message,isError=false){
+    function setLoginStatus(message, isError = false){
       const status = document.getElementById("loginStatus");
       status.innerText = message;
       status.className = isError ? "status error" : "status";
@@ -236,18 +250,92 @@
       document.getElementById("loginBtn").disabled = disabled;
     }
 
+    function saveOwnerSession(mess, userId = null, phoneFallback = ""){
+      localStorage.setItem("ownerMessId", mess.id);
+      localStorage.setItem("ownerMessName", mess.name || "");
+      localStorage.setItem("ownerPhone", mess.contact || phoneFallback || "");
+
+      if(userId || mess.user_id){
+        localStorage.setItem("ownerUserId", userId || mess.user_id);
+      }else{
+        localStorage.removeItem("ownerUserId");
+      }
+    }
+
+    async function loginWithSupabaseAuth(contact10, password){
+      const partnerEmail = buildPartnerEmail(contact10);
+
+      const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({
+        email: partnerEmail,
+        password: password
+      });
+
+      if(loginError || !loginData?.user){
+        return null;
+      }
+
+      const { data: messByUser, error: messByUserError } = await sb
+        .from("mess")
+        .select("*")
+        .eq("user_id", loginData.user.id)
+        .maybeSingle();
+
+      if(messByUserError || !messByUser){
+        return null;
+      }
+
+      return {
+        userId: loginData.user.id,
+        mess: messByUser
+      };
+    }
+
+    async function loginWithOldMessTable(contact10, password){
+      /*
+        MVP fallback:
+        This supports old registrations where password is stored in mess table.
+        Later, remove this and use only Supabase Auth.
+      */
+
+      const { data: allMess, error: fetchError } = await sb
+        .from("mess")
+        .select("*")
+        .limit(1000);
+
+      if(fetchError){
+        console.log("Old login fetch error:", fetchError);
+        throw new Error("Login check failed. Please check Supabase table permission.");
+      }
+
+      const matchedMess = (allMess || []).find(row => {
+        const rowPhone10 = last10(row.contact);
+        const rowPassword = String(row.password || "").trim();
+
+        return rowPhone10 === contact10 && rowPassword === password;
+      });
+
+      if(!matchedMess){
+        return null;
+      }
+
+      return {
+        userId: matchedMess.user_id || null,
+        mess: matchedMess
+      };
+    }
+
     async function loginPartner(){
       const rawContact = document.getElementById("loginContact").value.trim();
       const contact10 = last10(rawContact);
       const password = document.getElementById("loginPassword").value.trim();
 
       if(!contact10 || !password){
-        setLoginStatus("Please enter mobile number and password.",true);
+        setLoginStatus("Please enter mobile number and password.", true);
         return;
       }
 
       if(contact10.length !== 10){
-        setLoginStatus("Please enter 10 digit mobile number.",true);
+        setLoginStatus("Please enter valid 10 digit mobile number.", true);
         return;
       }
 
@@ -255,83 +343,40 @@
       setLoginStatus("Checking login...");
 
       try{
-        // 1. Try Supabase Auth login for new accounts
-        const partnerEmail = buildPartnerEmail(contact10);
+        let result = await loginWithSupabaseAuth(contact10, password);
 
-        const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({
-          email: partnerEmail,
-          password: password
-        });
-
-        if(!loginError && loginData?.user){
-          const { data: messByUser, error: messByUserError } = await sb
-            .from("mess")
-            .select("*")
-            .eq("user_id", loginData.user.id)
-            .maybeSingle();
-
-          if(!messByUserError && messByUser){
-            localStorage.setItem("ownerUserId", loginData.user.id);
-            localStorage.setItem("ownerMessId", messByUser.id);
-            localStorage.setItem("ownerMessName", messByUser.name || "");
-            localStorage.setItem("ownerPhone", messByUser.contact || contact10);
-
-            setLoginStatus("Login successful! Opening dashboard...");
-            setTimeout(() => {
-              window.location.href = "dashboard.html";
-            }, 600);
-            return;
-          }
+        if(!result){
+          result = await loginWithOldMessTable(contact10, password);
         }
 
-        // 2. Old registration fallback:
-        // Searches mess table and compares last 10 digits of saved mobile number.
-        const { data: allMess, error: fetchError } = await sb
-          .from("mess")
-          .select("*");
-
-        if(fetchError){
-          console.log("Fetch error:", fetchError);
-          setLoginStatus("Login check failed. Supabase permission issue.",true);
+        if(!result || !result.mess){
+          setLoginStatus("Invalid mobile number or password.", true);
           setLoginDisabled(false);
           return;
         }
 
-        const matchedMess = (allMess || []).find(row => {
-          const rowPhone10 = last10(row.contact);
-          const rowPassword = String(row.password || "").trim();
-          return rowPhone10 === contact10 && rowPassword === password;
-        });
-
-        if(!matchedMess){
-          setLoginStatus("Invalid mobile number or password.",true);
-          setLoginDisabled(false);
-          return;
-        }
-
-        localStorage.setItem("ownerMessId", matchedMess.id);
-        localStorage.setItem("ownerMessName", matchedMess.name || "");
-        localStorage.setItem("ownerPhone", matchedMess.contact || contact10);
-
-        if(matchedMess.user_id){
-          localStorage.setItem("ownerUserId", matchedMess.user_id);
-        }else{
-          localStorage.removeItem("ownerUserId");
-        }
+        saveOwnerSession(result.mess, result.userId, contact10);
 
         setLoginStatus("Login successful! Opening dashboard...");
+
         setTimeout(() => {
           window.location.href = "dashboard.html";
         }, 600);
 
       }catch(err){
         console.log("Unexpected login error:", err);
-        setLoginStatus(err.message || "Something went wrong during login.",true);
+        setLoginStatus(err.message || "Something went wrong during login.", true);
         setLoginDisabled(false);
       }
     }
 
-    document.getElementById("loginPassword").addEventListener("keydown",function(e){
+    document.getElementById("loginPassword").addEventListener("keydown", function(e){
+      if(e.key === "Enter"){
+        loginPartner();
+      }
+    });
+
+    document.getElementById("loginContact").addEventListener("keydown", function(e){
       if(e.key === "Enter"){
         loginPartner();
       }
