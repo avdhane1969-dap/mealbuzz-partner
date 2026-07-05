@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Meal Buzz Partner Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -484,7 +485,7 @@
     let currentMessId = null;
     let currentMessData = null;
 
-    function setStatus(message,isError=false){
+    function setStatus(message, isError = false){
       const box = document.getElementById("saveStatus");
       box.innerText = message;
       box.className = isError ? "status-line error" : "status-line";
@@ -494,22 +495,22 @@
       document.getElementById("saveBtn").disabled = disabled;
     }
 
-    function safeValue(value,fallback="-"){
+    function safeValue(value, fallback = "-"){
       return value && String(value).trim() ? value : fallback;
     }
 
     function fillPreview(){
       document.getElementById("previewMorning").innerText =
-        safeValue(document.getElementById("morningMenu").value,"Not updated");
+        safeValue(document.getElementById("morningMenu").value, "Not updated");
 
       document.getElementById("previewLunch").innerText =
-        safeValue(document.getElementById("lunchMenu").value,"Not updated");
+        safeValue(document.getElementById("lunchMenu").value, "Not updated");
 
       document.getElementById("previewDinner").innerText =
-        safeValue(document.getElementById("dinnerMenu").value,"Not updated");
+        safeValue(document.getElementById("dinnerMenu").value, "Not updated");
     }
 
-    function addItem(fieldId,item){
+    function addItem(fieldId, item){
       const field = document.getElementById(fieldId);
       const current = field.value.trim();
 
@@ -517,6 +518,7 @@
         field.value = item;
       }else{
         const items = current.split(",").map(x => x.trim().toLowerCase());
+
         if(!items.includes(item.toLowerCase())){
           field.value = current + ", " + item;
         }
@@ -525,7 +527,7 @@
       fillPreview();
     }
 
-    function setFullMenu(fieldId,text){
+    function setFullMenu(fieldId, text){
       document.getElementById(fieldId).value = text;
       fillPreview();
     }
@@ -540,6 +542,31 @@
     }
 
     async function getCurrentMess(){
+      const savedMessId = localStorage.getItem("ownerMessId");
+
+      if(savedMessId){
+        const { data: messById, error: idError } = await sb
+          .from("mess")
+          .select("*")
+          .eq("id", Number(savedMessId))
+          .maybeSingle();
+
+        if(!idError && messById){
+          currentMessId = messById.id;
+          currentUserId = messById.user_id || localStorage.getItem("ownerUserId") || null;
+
+          localStorage.setItem("ownerMessId", messById.id);
+          localStorage.setItem("ownerMessName", messById.name || "");
+          localStorage.setItem("ownerPhone", messById.contact || "");
+
+          if(messById.user_id){
+            localStorage.setItem("ownerUserId", messById.user_id);
+          }
+
+          return messById;
+        }
+      }
+
       const { data: authData, error: authError } = await sb.auth.getUser();
 
       if(!authError && authData?.user){
@@ -548,30 +575,18 @@
         const { data: messByUser, error: userMessError } = await sb
           .from("mess")
           .select("*")
-          .eq("user_id",currentUserId)
+          .eq("user_id", currentUserId)
           .maybeSingle();
 
         if(!userMessError && messByUser){
           currentMessId = messByUser.id;
-          localStorage.setItem("ownerUserId",currentUserId);
-          localStorage.setItem("ownerMessId",messByUser.id);
+
+          localStorage.setItem("ownerUserId", currentUserId);
+          localStorage.setItem("ownerMessId", messByUser.id);
+          localStorage.setItem("ownerMessName", messByUser.name || "");
+          localStorage.setItem("ownerPhone", messByUser.contact || "");
+
           return messByUser;
-        }
-      }
-
-      const savedMessId = localStorage.getItem("ownerMessId");
-
-      if(savedMessId){
-        const { data: messById, error: idError } = await sb
-          .from("mess")
-          .select("*")
-          .eq("id",Number(savedMessId))
-          .maybeSingle();
-
-        if(!idError && messById){
-          currentMessId = messById.id;
-          currentUserId = messById.user_id || localStorage.getItem("ownerUserId") || null;
-          return messById;
         }
       }
 
@@ -582,13 +597,13 @@
       currentMessData = data;
 
       document.getElementById("welcomeTitle").innerText =
-        "Welcome, " + safeValue(data.owner_name || data.name,"Partner");
+        "Welcome, " + safeValue(data.owner_name || data.name, "Partner");
 
       document.getElementById("messNameBox").innerText = safeValue(data.name);
       document.getElementById("contactBox").innerText = safeValue(data.contact);
       document.getElementById("priceBox").innerText = safeValue(data.price);
       document.getElementById("locationBox").innerText = safeValue(data.location);
-      document.getElementById("statusBadge").innerText = safeValue(data.status,"Open");
+      document.getElementById("statusBadge").innerText = safeValue(data.status, "Open");
 
       document.getElementById("morningMenu").value = data.morning_menu || "";
       document.getElementById("lunchMenu").value = data.lunch_menu || "";
@@ -600,31 +615,43 @@
     }
 
     async function initDashboard(){
-      const data = await getCurrentMess();
+      try{
+        const data = await getCurrentMess();
 
-      if(!data){
+        if(!data){
+          document.getElementById("loadingCard").innerHTML = `
+            <div class="section-title">No mess profile found</div>
+            <p class="muted">Please login again or register your mess first.</p>
+            <br>
+            <a href="index.html"><button class="btn primary" type="button">Go to Login</button></a>
+          `;
+          return;
+        }
+
+        loadIntoUI(data);
+
+        document.getElementById("loadingCard").classList.add("hidden");
+        document.getElementById("dashboardContent").classList.remove("hidden");
+
+        ["morningMenu","lunchMenu","dinnerMenu"].forEach(id => {
+          document.getElementById(id).addEventListener("input", fillPreview);
+        });
+
+      }catch(err){
+        console.log("Dashboard load error:", err);
+
         document.getElementById("loadingCard").innerHTML = `
-          <div class="section-title">No mess profile found</div>
-          <p class="muted">Please login again or register your mess first.</p>
+          <div class="section-title">Dashboard load failed</div>
+          <p class="muted">${err.message || "Something went wrong while loading dashboard."}</p>
           <br>
           <a href="index.html"><button class="btn primary" type="button">Go to Login</button></a>
         `;
-        return;
       }
-
-      loadIntoUI(data);
-
-      document.getElementById("loadingCard").classList.add("hidden");
-      document.getElementById("dashboardContent").classList.remove("hidden");
-
-      ["morningMenu","lunchMenu","dinnerMenu"].forEach(id => {
-        document.getElementById(id).addEventListener("input",fillPreview);
-      });
     }
 
     async function saveMenu(){
       if(!currentMessId){
-        setStatus("Mess ID not found. Please login again.",true);
+        setStatus("Mess ID not found. Please login again.", true);
         return;
       }
 
@@ -637,29 +664,25 @@
         updated_at: new Date().toISOString()
       };
 
-      setSaveDisabled(true);
+            setSaveDisabled(true);
       setStatus("Saving menu...");
 
-      let query = sb.from("mess").update(payload);
-
-      if(currentUserId){
-        query = query.eq("user_id",currentUserId);
-      }else{
-        query = query.eq("id",Number(currentMessId));
-      }
-
-      const { error } = await query;
+      const { error } = await sb
+        .from("mess")
+        .update(payload)
+        .eq("id", Number(currentMessId));
 
       if(error){
-        console.log("Save menu error:",error);
-        setStatus("Save failed: " + error.message,true);
+        console.log("Save menu error:", error);
+        setStatus("Save failed: " + error.message, true);
         setSaveDisabled(false);
         return;
       }
 
       document.getElementById("statusBadge").innerText = payload.status;
       fillPreview();
-      setStatus("Menu updated successfully.");
+
+      setStatus("Menu updated successfully. Students can now see your live menu.");
       setSaveDisabled(false);
     }
 
@@ -674,4 +697,19 @@
     async function logoutOwner(){
       try{
         await sb.auth.signOut();
-      }c
+      }catch(err){
+        console.log("Logout auth error:", err);
+      }
+
+      localStorage.removeItem("ownerUserId");
+      localStorage.removeItem("ownerMessId");
+      localStorage.removeItem("ownerMessName");
+      localStorage.removeItem("ownerPhone");
+
+      window.location.href = "index.html";
+    }
+
+    initDashboard();
+  </script>
+</body>
+</html>
